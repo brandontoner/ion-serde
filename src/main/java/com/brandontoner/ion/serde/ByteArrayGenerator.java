@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Generates serializers for byte arrays.
  */
-public final class ByteArrayGenerator extends Generator {
+final class ByteArrayGenerator extends Generator {
     /**
      * Constructor.
      *
@@ -15,9 +15,9 @@ public final class ByteArrayGenerator extends Generator {
      * @param serializationConfig serialization config
      * @param generationContext   generation context
      */
-    public ByteArrayGenerator(final GeneratorFactory generatorFactory,
-                              final SerializationConfig serializationConfig,
-                              final GenerationContext generationContext) {
+    ByteArrayGenerator(final GeneratorFactory generatorFactory,
+                       final SerializationConfig serializationConfig,
+                       final GenerationContext generationContext) {
         super(generatorFactory, serializationConfig, generationContext);
     }
 

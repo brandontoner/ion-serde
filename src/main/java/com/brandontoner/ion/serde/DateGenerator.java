@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.amazon.ion.Timestamp;
 
-public final class DateGenerator extends Generator {
+final class DateGenerator extends Generator {
     /**
      * Constructor.
      *
@@ -15,9 +15,9 @@ public final class DateGenerator extends Generator {
      * @param serializationConfig serialization config
      * @param generationContext   generation context
      */
-    public DateGenerator(final GeneratorFactory generatorFactory,
-                         final SerializationConfig serializationConfig,
-                         final GenerationContext generationContext) {
+    DateGenerator(final GeneratorFactory generatorFactory,
+                  final SerializationConfig serializationConfig,
+                  final GenerationContext generationContext) {
         super(generatorFactory, serializationConfig, generationContext);
     }
 

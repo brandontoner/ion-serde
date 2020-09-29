@@ -12,17 +12,17 @@ import com.amazon.ion.IonReader;
 import com.amazon.ion.IonType;
 import com.amazon.ion.IonWriter;
 
-public final class PojoGenerator extends Generator {
+final class PojoGenerator extends Generator {
     private final Type serializationType;
     private final Type deserializationType;
     private final List<Param> params;
 
-    public PojoGenerator(final Type serializationType,
-                         final Type deserializationType,
-                         final List<Param> params,
-                         final SerializationConfig serializationConfig,
-                         final GenerationContext generationContext,
-                         final GeneratorFactory generatorFactory) {
+    private PojoGenerator(final Type serializationType,
+                          final Type deserializationType,
+                          final List<Param> params,
+                          final SerializationConfig serializationConfig,
+                          final GenerationContext generationContext,
+                          final GeneratorFactory generatorFactory) {
         super(generatorFactory, serializationConfig, generationContext);
         // TODO make sure the types make sense
         // * deserializationType must be a subclass / implement serialization type
@@ -32,10 +32,10 @@ public final class PojoGenerator extends Generator {
         this.params = params;
     }
 
-    public static PojoGenerator create(final GeneratorFactory generatorFactory,
-                                       final SerializationConfig serializationConfig,
-                                       final GenerationContext generationContext,
-                                       final Class<?> clazz) {
+    static PojoGenerator create(final GeneratorFactory generatorFactory,
+                                final SerializationConfig serializationConfig,
+                                final GenerationContext generationContext,
+                                final Class<?> clazz) {
         Serde<?> serde = Serde.discover(clazz, serializationConfig);
         List<Param> params = new ArrayList<>();
         for (int i = 0; i < serde.getParamNames().size(); i++) {

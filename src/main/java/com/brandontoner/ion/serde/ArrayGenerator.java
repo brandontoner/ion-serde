@@ -14,7 +14,7 @@ import com.amazon.ion.IonWriter;
 /**
  * Generates serialization for arrays.
  */
-public final class ArrayGenerator extends Generator {
+final class ArrayGenerator extends Generator {
     /** Array type. */
     private final Class<?> clazz;
     /** Equivalent list type. */
@@ -28,10 +28,10 @@ public final class ArrayGenerator extends Generator {
      * @param generationContext   generation context
      * @param aClass              array type to generate
      */
-    public ArrayGenerator(final GeneratorFactory generatorFactory,
-                          final SerializationConfig serializationConfig,
-                          final GenerationContext generationContext,
-                          final Class<?> aClass) {
+    ArrayGenerator(final GeneratorFactory generatorFactory,
+                   final SerializationConfig serializationConfig,
+                   final GenerationContext generationContext,
+                   final Class<?> aClass) {
         super(generatorFactory, serializationConfig, generationContext);
         this.clazz = aClass;
         listType = TypeUtils.parameterizedType(List.class, aClass.getComponentType());

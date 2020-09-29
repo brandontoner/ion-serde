@@ -11,15 +11,15 @@ import com.amazon.ion.IonReader;
 import com.amazon.ion.IonType;
 import com.amazon.ion.IonWriter;
 
-public final class ListGenerator extends Generator {
+final class ListGenerator extends Generator {
     private final ParameterizedType listType;
     private final ParameterizedType arrayListType;
     private final Type componentType;
 
-    public ListGenerator(final GeneratorFactory generatorFactory,
-                         final SerializationConfig serializationConfig,
-                         final GenerationContext generationContext,
-                         final ParameterizedType clazz) {
+    ListGenerator(final GeneratorFactory generatorFactory,
+                  final SerializationConfig serializationConfig,
+                  final GenerationContext generationContext,
+                  final ParameterizedType clazz) {
         super(generatorFactory, serializationConfig, generationContext);
         listType = clazz;
         componentType = listType.getActualTypeArguments()[0];

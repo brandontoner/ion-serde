@@ -15,15 +15,15 @@ import com.amazon.ion.IonWriter;
 /**
  * Serializes a map. Serializes as a list of key-value pairs instead of a struct to support any type of key.
  */
-public final class MapGenerator extends Generator {
+final class MapGenerator extends Generator {
     private final ParameterizedType mapType;
     private final ParameterizedType hashMapType;
     private final ParameterizedType entryType;
 
-    public MapGenerator(final GeneratorFactory generatorFactory,
-                        final SerializationConfig serializationConfig,
-                        final GenerationContext generationContext,
-                        final ParameterizedType mapType) {
+    MapGenerator(final GeneratorFactory generatorFactory,
+                 final SerializationConfig serializationConfig,
+                 final GenerationContext generationContext,
+                 final ParameterizedType mapType) {
         super(generatorFactory, serializationConfig, generationContext);
         this.mapType = mapType;
         hashMapType = TypeUtils.parameterizedType(HashMap.class, mapType.getActualTypeArguments());

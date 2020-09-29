@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Set;
 
-public final class IntGenerator extends Generator {
+final class IntGenerator extends Generator {
     /**
      * Constructor.
      *
@@ -12,9 +12,9 @@ public final class IntGenerator extends Generator {
      * @param serializationConfig serialization config
      * @param generationContext   generation context
      */
-    public IntGenerator(final GeneratorFactory generatorFactory,
-                        final SerializationConfig serializationConfig,
-                        final GenerationContext generationContext) {
+    IntGenerator(final GeneratorFactory generatorFactory,
+                 final SerializationConfig serializationConfig,
+                 final GenerationContext generationContext) {
         super(generatorFactory, serializationConfig, generationContext);
     }
 

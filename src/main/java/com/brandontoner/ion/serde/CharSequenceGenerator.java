@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Generates serializers for CharSequences.
  */
-public final class CharSequenceGenerator extends Generator {
+final class CharSequenceGenerator extends Generator {
     /**
      * Constructor.
      *
@@ -15,9 +15,9 @@ public final class CharSequenceGenerator extends Generator {
      * @param serializationConfig serialization config
      * @param generationContext   generation context
      */
-    public CharSequenceGenerator(final GeneratorFactory generatorFactory,
-                                 final SerializationConfig serializationConfig,
-                                 final GenerationContext generationContext) {
+    CharSequenceGenerator(final GeneratorFactory generatorFactory,
+                          final SerializationConfig serializationConfig,
+                          final GenerationContext generationContext) {
         super(generatorFactory, serializationConfig, generationContext);
     }
 
