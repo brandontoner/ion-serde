@@ -23,7 +23,7 @@ public final class ByteArrayGenerator extends Generator {
 
     @Override
     public CharSequence callSerializer(final String value, final String ionWriterName) {
-        return new StringBuilder(ionWriterName).append(".writeBlob(").append(value).append(")");
+        return new StringBuilder(ionWriterName).append(".writeBlob(").append(value).append(')');
     }
 
     @Override

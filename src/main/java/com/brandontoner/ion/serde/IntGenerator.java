@@ -20,7 +20,7 @@ public final class IntGenerator extends Generator {
 
     @Override
     public CharSequence callSerializer(final String value, final String ionWriterName) {
-        return new StringBuilder(ionWriterName).append(".writeInt(").append(value).append(")");
+        return new StringBuilder(ionWriterName).append(".writeInt(").append(value).append(')');
     }
 
     @Override

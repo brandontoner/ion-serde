@@ -34,7 +34,7 @@ public final class DateGenerator extends Generator {
     @Override
     public CharSequence callDeserializer(final String ionReaderName) {
         return new StringBuilder("new ").append(getTypeName(Date.class))
-                                        .append("(")
+                                        .append('(')
                                         .append(ionReaderName)
                                         .append(".timestampValue().getMillis())");
     }

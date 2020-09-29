@@ -52,7 +52,7 @@ public final class ListGenerator extends Generator {
         stringBuilder.append(indent(1))
                      .append("public static void ")
                      .append(getSerializerName(listType))
-                     .append("(")
+                     .append('(')
                      .append(getTypeName(listType))
                      .append(" v, ")
                      .append(getTypeName(IonWriter.class))
@@ -70,11 +70,11 @@ public final class ListGenerator extends Generator {
                      .append(System.lineSeparator());
         stringBuilder.append(indent(3))
                      .append(getGeneratorFactory().getGenerator(componentType).callSerializer("e", "ionWriter"))
-                     .append(";")
+                     .append(';')
                      .append(System.lineSeparator());
-        stringBuilder.append(indent(2)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(2)).append('}').append(System.lineSeparator());
         stringBuilder.append(indent(2)).append("ionWriter.stepOut();").append(System.lineSeparator());
-        stringBuilder.append(indent(1)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(1)).append('}').append(System.lineSeparator());
         return stringBuilder;
     }
 
@@ -86,9 +86,9 @@ public final class ListGenerator extends Generator {
         stringBuilder.append(indent(1))
                      .append("public static ")
                      .append(getTypeName(listType))
-                     .append(" ")
+                     .append(' ')
                      .append(getDeserializerName(listType))
-                     .append("(")
+                     .append('(')
                      .append(getTypeName(IonReader.class))
                      .append(" ionReader) throws ")
                      .append(getTypeName(IOException.class))
@@ -108,10 +108,10 @@ public final class ListGenerator extends Generator {
                      .append(getGeneratorFactory().getGenerator(componentType).callDeserializer("ionReader"))
                      .append(");")
                      .append(System.lineSeparator());
-        stringBuilder.append(indent(2)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(2)).append('}').append(System.lineSeparator());
         stringBuilder.append(indent(2)).append("ionReader.stepOut();").append(System.lineSeparator());
         stringBuilder.append(indent(2)).append("return output;").append(System.lineSeparator());
-        stringBuilder.append(indent(1)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(1)).append('}').append(System.lineSeparator());
 
         return stringBuilder;
     }

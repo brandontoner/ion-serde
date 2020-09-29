@@ -45,7 +45,7 @@ public final class MapGenerator extends Generator {
 
     @Override
     public CharSequence callDeserializer(final String ionReaderName) {
-        return new StringBuilder().append(getDeserializerName(mapType)).append("(").append(ionReaderName).append(")");
+        return new StringBuilder().append(getDeserializerName(mapType)).append('(').append(ionReaderName).append(')');
     }
 
     @Override
@@ -58,7 +58,7 @@ public final class MapGenerator extends Generator {
         stringBuilder.append(indent(1))
                      .append("public static void ")
                      .append(getSerializerName(mapType))
-                     .append("(")
+                     .append('(')
                      .append(getTypeName(mapType))
                      .append(" v, ")
                      .append(getTypeName(IonWriter.class))
@@ -77,18 +77,18 @@ public final class MapGenerator extends Generator {
         stringBuilder.append(indent(3)).append("ionWriter.setFieldName(\"key\");").append(System.lineSeparator());
         stringBuilder.append(indent(3))
                      .append(getGeneratorFactory().getGenerator(keyType).callSerializer("entry.getKey()", "ionWriter"))
-                     .append(";")
+                     .append(';')
                      .append(System.lineSeparator());
         stringBuilder.append(indent(3)).append("ionWriter.setFieldName(\"value\");").append(System.lineSeparator());
         stringBuilder.append(indent(3))
                      .append(getGeneratorFactory().getGenerator(valueType)
                                                   .callSerializer("entry.getValue()", "ionWriter"))
-                     .append(";")
+                     .append(';')
                      .append(System.lineSeparator());
         stringBuilder.append(indent(3)).append("ionWriter.stepOut();").append(System.lineSeparator());
-        stringBuilder.append(indent(2)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(2)).append('}').append(System.lineSeparator());
         stringBuilder.append(indent(2)).append("ionWriter.stepOut();").append(System.lineSeparator());
-        stringBuilder.append(indent(1)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(1)).append('}').append(System.lineSeparator());
         return stringBuilder;
     }
 
@@ -102,9 +102,9 @@ public final class MapGenerator extends Generator {
         stringBuilder.append(indent(1))
                      .append("public static ")
                      .append(getTypeName(mapType))
-                     .append(" ")
+                     .append(' ')
                      .append(getDeserializerName(mapType))
-                     .append("(")
+                     .append('(')
                      .append(getTypeName(IonReader.class))
                      .append(" ionReader) throws ")
                      .append(getTypeName(IOException.class))
@@ -121,18 +121,18 @@ public final class MapGenerator extends Generator {
         stringBuilder.append(indent(2)).append("while (ionReader.next() != null) {").append(System.lineSeparator());
         stringBuilder.append(indent(3))
                      .append(getTypeName(keyType))
-                     .append(" ")
+                     .append(' ')
                      .append("key = ")
                      .append(getGeneratorFactory().getGenerator(keyType).defaultValue())
-                     .append(";")
+                     .append(';')
                      .append(System.lineSeparator());
         stringBuilder.append(indent(3)).append("boolean hasKey = false;").append(System.lineSeparator());
         stringBuilder.append(indent(3))
                      .append(getTypeName(valueType))
-                     .append(" ")
+                     .append(' ')
                      .append("value = ")
                      .append(getGeneratorFactory().getGenerator(valueType).defaultValue())
-                     .append(";")
+                     .append(';')
                      .append(System.lineSeparator());
         stringBuilder.append(indent(3)).append("boolean hasValue = false;").append(System.lineSeparator());
         stringBuilder.append(indent(3)).append("ionReader.stepIn();").append(System.lineSeparator());
@@ -142,7 +142,7 @@ public final class MapGenerator extends Generator {
         stringBuilder.append(indent(6))
                      .append("key = ")
                      .append(getGeneratorFactory().getGenerator(keyType).callDeserializer("ionReader"))
-                     .append(";")
+                     .append(';')
                      .append(System.lineSeparator());
         stringBuilder.append(indent(6)).append("hasKey = true;").append(System.lineSeparator());
         stringBuilder.append(indent(6)).append("break;").append(System.lineSeparator());
@@ -150,19 +150,19 @@ public final class MapGenerator extends Generator {
         stringBuilder.append(indent(6))
                      .append("value = ")
                      .append(getGeneratorFactory().getGenerator(valueType).callDeserializer("ionReader"))
-                     .append(";")
+                     .append(';')
                      .append(System.lineSeparator());
         stringBuilder.append(indent(6)).append("hasValue = true;").append(System.lineSeparator());
         stringBuilder.append(indent(6)).append("break;").append(System.lineSeparator());
-        stringBuilder.append(indent(4)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(4)).append('}').append(System.lineSeparator());
         stringBuilder.append(indent(4)).append("output.put(key, value);").append(System.lineSeparator());
-        stringBuilder.append(indent(3)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(3)).append('}').append(System.lineSeparator());
         stringBuilder.append(indent(3)).append("ionReader.stepOut();").append(System.lineSeparator());
-        stringBuilder.append(indent(2)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(2)).append('}').append(System.lineSeparator());
         stringBuilder.append(indent(2)).append("ionReader.stepOut();").append(System.lineSeparator());
         stringBuilder.append(indent(2)).append("return output;").append(System.lineSeparator());
 
-        stringBuilder.append(indent(1)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(1)).append('}').append(System.lineSeparator());
         return stringBuilder;
     }
 }
