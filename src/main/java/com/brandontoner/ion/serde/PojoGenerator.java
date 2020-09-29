@@ -79,7 +79,7 @@ public final class PojoGenerator extends Generator {
         StringBuilder stringBuilder = new StringBuilder();
 
         // Method declaration line
-        stringBuilder.append(getSerializationConfig().indent(1))
+        stringBuilder.append(indent(1))
                      .append("public static void ")
                      .append(getSerializerName(serializationType))
                      .append("(")
@@ -91,7 +91,7 @@ public final class PojoGenerator extends Generator {
                      .append(" {")
                      .append(System.lineSeparator());
 
-        stringBuilder.append(getSerializationConfig().indent(2))
+        stringBuilder.append(indent(2))
                      .append("ionWriter.stepIn(")
                      .append(getTypeName(IonType.class))
                      .append(".STRUCT);")
@@ -100,22 +100,21 @@ public final class PojoGenerator extends Generator {
         for (Param param : params) {
             String paramName = param.name();
             Type paramType = param.type();
-            stringBuilder.append(getSerializationConfig().indent(2))
+            stringBuilder.append(indent(2))
                          .append("ionWriter.setFieldName(")
                          .append(quote(paramName))
                          .append(");")
                          .append(System.lineSeparator());
-            stringBuilder.append(getSerializationConfig().indent(2))
+            stringBuilder.append(indent(2))
                          .append(getGeneratorFactory().getGenerator(paramType)
-                                                      .callSerializer("v." + param.getter().getName() + "()", "ionWriter"))
+                                                      .callSerializer("v." + param.getter().getName() + "()",
+                                                                      "ionWriter"))
                          .append(";")
                          .append(System.lineSeparator());
 
         }
-        stringBuilder.append(getSerializationConfig().indent(2))
-                     .append("ionWriter.stepOut();")
-                     .append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(1)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(2)).append("ionWriter.stepOut();").append(System.lineSeparator());
+        stringBuilder.append(indent(1)).append("}").append(System.lineSeparator());
         return stringBuilder;
     }
 
@@ -124,7 +123,7 @@ public final class PojoGenerator extends Generator {
         StringBuilder stringBuilder = new StringBuilder();
 
         // Method declaration line
-        stringBuilder.append(getSerializationConfig().indent(1))
+        stringBuilder.append(indent(1))
                      .append("public static ")
                      .append(getTypeName(serializationType))
                      .append(" ")
@@ -135,15 +134,13 @@ public final class PojoGenerator extends Generator {
                      .append(getTypeName(IOException.class))
                      .append(" {")
                      .append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(2))
-                     .append("ionReader.stepIn();")
-                     .append(System.lineSeparator());
+        stringBuilder.append(indent(2)).append("ionReader.stepIn();").append(System.lineSeparator());
 
         for (Param param : params) {
             String paramName = param.name();
             Type paramType = param.type();
 
-            stringBuilder.append(getSerializationConfig().indent(2))
+            stringBuilder.append(indent(2))
                          .append(getTypeName(paramType))
                          .append(" ")
                          .append(paramName)
@@ -151,46 +148,42 @@ public final class PojoGenerator extends Generator {
                          .append(getGeneratorFactory().getGenerator(paramType).defaultValue())
                          .append(";")
                          .append(System.lineSeparator());
-            stringBuilder.append(getSerializationConfig().indent(2))
+            stringBuilder.append(indent(2))
                          .append("boolean has")
                          .append(camelCase(paramName))
                          .append(" = false;")
                          .append(System.lineSeparator());
         }
 
-        stringBuilder.append(getSerializationConfig().indent(2))
-                     .append("while (ionReader.next() != null) {")
-                     .append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(3))
-                     .append("switch (ionReader.getFieldName()) {")
-                     .append(System.lineSeparator());
+        stringBuilder.append(indent(2)).append("while (ionReader.next() != null) {").append(System.lineSeparator());
+        stringBuilder.append(indent(3)).append("switch (ionReader.getFieldName()) {").append(System.lineSeparator());
         for (Param param : params) {
             String paramName = param.name();
             Type paramType = param.type();
 
-            stringBuilder.append(getSerializationConfig().indent(4))
+            stringBuilder.append(indent(4))
                          .append("case ")
                          .append(quote(paramName))
                          .append(":")
                          .append(System.lineSeparator());
-            stringBuilder.append(getSerializationConfig().indent(5))
+            stringBuilder.append(indent(5))
                          .append(paramName)
                          .append(" = ")
                          .append(getGeneratorFactory().getGenerator(paramType).callDeserializer("ionReader"))
                          .append(";")
                          .append(System.lineSeparator());
-            stringBuilder.append(getSerializationConfig().indent(5))
+            stringBuilder.append(indent(5))
                          .append("has")
                          .append(camelCase(paramName))
                          .append(" = true;")
                          .append(System.lineSeparator());
-            stringBuilder.append(getSerializationConfig().indent(5)).append("break;").append(System.lineSeparator());
+            stringBuilder.append(indent(5)).append("break;").append(System.lineSeparator());
         }
-        stringBuilder.append(getSerializationConfig().indent(3)).append("}").append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(2)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(3)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(2)).append("}").append(System.lineSeparator());
 
         stringBuilder.append("        ionReader.stepOut();").append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(2))
+        stringBuilder.append(indent(2))
                      .append("return new ")
                      .append(getTypeName(deserializationType))
                      .append("(")
@@ -198,7 +191,7 @@ public final class PojoGenerator extends Generator {
                      .append(");")
                      .append(System.lineSeparator());
 
-        stringBuilder.append(getSerializationConfig().indent(1)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(1)).append("}").append(System.lineSeparator());
         return stringBuilder;
     }
 }

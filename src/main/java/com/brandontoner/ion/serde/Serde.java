@@ -22,7 +22,10 @@ public final class Serde<T> {
     private final List<String> paramNames;
     private final List<Method> methods;
 
-    public Serde(final Class<T> clazz, final Constructor<T> constructor, final List<String> paramNames, final List<Method> methods) {
+    public Serde(final Class<T> clazz,
+                 final Constructor<T> constructor,
+                 final List<String> paramNames,
+                 final List<Method> methods) {
         this.clazz = clazz;
         this.constructor = constructor;
         this.paramNames = paramNames;

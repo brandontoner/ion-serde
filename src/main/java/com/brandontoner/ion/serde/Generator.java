@@ -69,6 +69,16 @@ public abstract class Generator {
      */
     public abstract CharSequence generateDeserializer();
 
+    /**
+     * Returns the default value used to initialize variables. Defaults to null, which should be correct for
+     * non-primitive types.
+     *
+     * @return default value
+     */
+    public CharSequence defaultValue() {
+        return "null";
+    }
+
     protected SerializationConfig getSerializationConfig() {
         return serializationConfig;
     }
@@ -81,8 +91,14 @@ public abstract class Generator {
         return generatorFactory;
     }
 
-    public CharSequence defaultValue() {
-        return "null";
+    /**
+     * Gets a CharSequence for the given indentation level.
+     *
+     * @param i indentation level (each level incremented by 1)
+     * @return indentation char sequence
+     */
+    protected CharSequence indent(final int i) {
+        return serializationConfig.indent(i);
     }
 
     protected String getTypeName(final Type type) {

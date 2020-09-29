@@ -49,7 +49,7 @@ public final class ListGenerator extends Generator {
         StringBuilder stringBuilder = new StringBuilder();
 
         // Method declaration line
-        stringBuilder.append(getSerializationConfig().indent(1))
+        stringBuilder.append(indent(1))
                      .append("public static void ")
                      .append(getSerializerName(listType))
                      .append("(")
@@ -62,23 +62,19 @@ public final class ListGenerator extends Generator {
                      .append(System.lineSeparator());
 
 
-        stringBuilder.append(getSerializationConfig().indent(2))
-                     .append("ionWriter.stepIn(IonType.LIST);")
-                     .append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(2))
+        stringBuilder.append(indent(2)).append("ionWriter.stepIn(IonType.LIST);").append(System.lineSeparator());
+        stringBuilder.append(indent(2))
                      .append("for (")
                      .append(getTypeName(componentType))
                      .append(" e : v) {")
                      .append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(3))
+        stringBuilder.append(indent(3))
                      .append(getGeneratorFactory().getGenerator(componentType).callSerializer("e", "ionWriter"))
                      .append(";")
                      .append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(2)).append("}").append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(2))
-                     .append("ionWriter.stepOut();")
-                     .append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(1)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(2)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(2)).append("ionWriter.stepOut();").append(System.lineSeparator());
+        stringBuilder.append(indent(1)).append("}").append(System.lineSeparator());
         return stringBuilder;
     }
 
@@ -87,7 +83,7 @@ public final class ListGenerator extends Generator {
         StringBuilder stringBuilder = new StringBuilder();
 
         // Method declaration line
-        stringBuilder.append(getSerializationConfig().indent(1))
+        stringBuilder.append(indent(1))
                      .append("public static ")
                      .append(getTypeName(listType))
                      .append(" ")
@@ -99,29 +95,23 @@ public final class ListGenerator extends Generator {
                      .append(" {")
                      .append(System.lineSeparator());
 
-        stringBuilder.append(getSerializationConfig().indent(2))
-                     .append("ionReader.stepIn();")
-                     .append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(2))
+        stringBuilder.append(indent(2)).append("ionReader.stepIn();").append(System.lineSeparator());
+        stringBuilder.append(indent(2))
                      .append(getTypeName(listType))
                      .append(" output = new ")
                      .append(getTypeName(arrayListType))
                      .append("();")
                      .append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(2))
-                     .append("while (ionReader.next() != null) {")
-                     .append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(3))
+        stringBuilder.append(indent(2)).append("while (ionReader.next() != null) {").append(System.lineSeparator());
+        stringBuilder.append(indent(3))
                      .append("output.add(")
                      .append(getGeneratorFactory().getGenerator(componentType).callDeserializer("ionReader"))
                      .append(");")
                      .append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(2)).append("}").append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(2))
-                     .append("ionReader.stepOut();")
-                     .append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(2)).append("return output;").append(System.lineSeparator());
-        stringBuilder.append(getSerializationConfig().indent(1)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(2)).append("}").append(System.lineSeparator());
+        stringBuilder.append(indent(2)).append("ionReader.stepOut();").append(System.lineSeparator());
+        stringBuilder.append(indent(2)).append("return output;").append(System.lineSeparator());
+        stringBuilder.append(indent(1)).append("}").append(System.lineSeparator());
 
         return stringBuilder;
     }
