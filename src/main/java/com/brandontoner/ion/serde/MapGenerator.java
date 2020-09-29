@@ -66,30 +66,32 @@ public final class MapGenerator extends Generator {
                      .append(" ionWriter) throws ")
                      .append(getTypeName(IOException.class))
                      .append(" {")
-                     .append(System.lineSeparator());
+                     .append(newline());
 
-        stringBuilder.append(indent(2)).append("ionWriter.stepIn(").append(getTypeName(IonType.class)).append(".LIST);").append(System.lineSeparator());
+        stringBuilder.append(indent(2)).append("ionWriter.stepIn(").append(getTypeName(IonType.class)).append(".LIST);").append(
+                newline());
         stringBuilder.append(indent(2))
                      .append("for (")
                      .append(getTypeName(entryType))
                      .append(" entry : v.entrySet()) {")
-                     .append(System.lineSeparator());
-        stringBuilder.append(indent(3)).append("ionWriter.stepIn(").append(getTypeName(IonType.class)).append(".STRUCT);").append(System.lineSeparator());
-        stringBuilder.append(indent(3)).append("ionWriter.setFieldName(\"key\");").append(System.lineSeparator());
+                     .append(newline());
+        stringBuilder.append(indent(3)).append("ionWriter.stepIn(").append(getTypeName(IonType.class)).append(".STRUCT);").append(
+                newline());
+        stringBuilder.append(indent(3)).append("ionWriter.setFieldName(\"key\");").append(newline());
         stringBuilder.append(indent(3))
                      .append(getGeneratorFactory().getGenerator(keyType).callSerializer("entry.getKey()", "ionWriter"))
                      .append(';')
-                     .append(System.lineSeparator());
-        stringBuilder.append(indent(3)).append("ionWriter.setFieldName(\"value\");").append(System.lineSeparator());
+                     .append(newline());
+        stringBuilder.append(indent(3)).append("ionWriter.setFieldName(\"value\");").append(newline());
         stringBuilder.append(indent(3))
                      .append(getGeneratorFactory().getGenerator(valueType)
                                                   .callSerializer("entry.getValue()", "ionWriter"))
                      .append(';')
-                     .append(System.lineSeparator());
-        stringBuilder.append(indent(3)).append("ionWriter.stepOut();").append(System.lineSeparator());
-        stringBuilder.append(indent(2)).append('}').append(System.lineSeparator());
-        stringBuilder.append(indent(2)).append("ionWriter.stepOut();").append(System.lineSeparator());
-        stringBuilder.append(indent(1)).append('}').append(System.lineSeparator());
+                     .append(newline());
+        stringBuilder.append(indent(3)).append("ionWriter.stepOut();").append(newline());
+        stringBuilder.append(indent(2)).append('}').append(newline());
+        stringBuilder.append(indent(2)).append("ionWriter.stepOut();").append(newline());
+        stringBuilder.append(indent(1)).append('}').append(newline());
         return stringBuilder;
     }
 
@@ -110,60 +112,61 @@ public final class MapGenerator extends Generator {
                      .append(" ionReader) throws ")
                      .append(getTypeName(IOException.class))
                      .append(" {")
-                     .append(System.lineSeparator());
+                     .append(newline());
 
         stringBuilder.append(indent(2))
                      .append(getTypeName(mapType))
                      .append(" output = new ")
                      .append(getTypeName(hashMapType))
                      .append("();")
-                     .append(System.lineSeparator());
-        stringBuilder.append(indent(2)).append("ionReader.stepIn();").append(System.lineSeparator());
-        stringBuilder.append(indent(2)).append("while (ionReader.next() != null) {").append(System.lineSeparator());
+                     .append(newline());
+        stringBuilder.append(indent(2)).append("ionReader.stepIn();").append(newline());
+        stringBuilder.append(indent(2)).append("while (ionReader.next() != null) {").append(newline());
         stringBuilder.append(indent(3))
                      .append(getTypeName(keyType))
                      .append(' ')
                      .append("key = ")
                      .append(getGeneratorFactory().getGenerator(keyType).defaultValue())
                      .append(';')
-                     .append(System.lineSeparator());
-        stringBuilder.append(indent(3)).append("boolean hasKey = false;").append(System.lineSeparator());
+                     .append(newline());
+        stringBuilder.append(indent(3)).append("boolean hasKey = false;").append(newline());
         stringBuilder.append(indent(3))
                      .append(getTypeName(valueType))
                      .append(' ')
                      .append("value = ")
                      .append(getGeneratorFactory().getGenerator(valueType).defaultValue())
                      .append(';')
-                     .append(System.lineSeparator());
-        stringBuilder.append(indent(3)).append("boolean hasValue = false;").append(System.lineSeparator());
-        stringBuilder.append(indent(3)).append("ionReader.stepIn();").append(System.lineSeparator());
-        stringBuilder.append(indent(3)).append("while (ionReader.next() != null) {").append(System.lineSeparator());
-        stringBuilder.append(indent(4)).append("switch (ionReader.getFieldName()) {").append(System.lineSeparator());
-        stringBuilder.append(indent(5)).append("case \"key\":").append(System.lineSeparator());
+                     .append(newline());
+        stringBuilder.append(indent(3)).append("boolean hasValue = false;").append(newline());
+        stringBuilder.append(indent(3)).append("ionReader.stepIn();").append(newline());
+        stringBuilder.append(indent(3)).append("while (ionReader.next() != null) {").append(newline());
+        stringBuilder.append(indent(4)).append("switch (ionReader.getFieldName()) {").append(newline());
+        stringBuilder.append(indent(5)).append("case \"key\":").append(newline());
         stringBuilder.append(indent(6))
                      .append("key = ")
                      .append(getGeneratorFactory().getGenerator(keyType).callDeserializer("ionReader"))
                      .append(';')
-                     .append(System.lineSeparator());
-        stringBuilder.append(indent(6)).append("hasKey = true;").append(System.lineSeparator());
-        stringBuilder.append(indent(6)).append("break;").append(System.lineSeparator());
-        stringBuilder.append(indent(5)).append("case \"value\":").append(System.lineSeparator());
+                     .append(newline());
+        stringBuilder.append(indent(6)).append("hasKey = true;").append(newline());
+        stringBuilder.append(indent(6)).append("break;").append(newline());
+        stringBuilder.append(indent(5)).append("case \"value\":").append(newline());
         stringBuilder.append(indent(6))
                      .append("value = ")
                      .append(getGeneratorFactory().getGenerator(valueType).callDeserializer("ionReader"))
                      .append(';')
-                     .append(System.lineSeparator());
-        stringBuilder.append(indent(6)).append("hasValue = true;").append(System.lineSeparator());
-        stringBuilder.append(indent(6)).append("break;").append(System.lineSeparator());
-        stringBuilder.append(indent(4)).append('}').append(System.lineSeparator());
-        stringBuilder.append(indent(4)).append("output.put(key, value);").append(System.lineSeparator());
-        stringBuilder.append(indent(3)).append('}').append(System.lineSeparator());
-        stringBuilder.append(indent(3)).append("ionReader.stepOut();").append(System.lineSeparator());
-        stringBuilder.append(indent(2)).append('}').append(System.lineSeparator());
-        stringBuilder.append(indent(2)).append("ionReader.stepOut();").append(System.lineSeparator());
-        stringBuilder.append(indent(2)).append("return output;").append(System.lineSeparator());
+                     .append(newline());
+        stringBuilder.append(indent(6)).append("hasValue = true;").append(newline());
+        stringBuilder.append(indent(6)).append("break;").append(newline());
+        stringBuilder.append(indent(4)).append('}').append(newline());
+        stringBuilder.append(indent(4)).append("output.put(key, value);").append(newline());
+        stringBuilder.append(indent(3)).append('}').append(newline());
+        stringBuilder.append(indent(3)).append("ionReader.stepOut();").append(newline());
+        stringBuilder.append(indent(2)).append('}').append(newline());
+        stringBuilder.append(indent(2)).append("ionReader.stepOut();").append(newline());
+        stringBuilder.append(indent(2)).append("return output;").append(newline());
 
-        stringBuilder.append(indent(1)).append('}').append(System.lineSeparator());
+        stringBuilder.append(indent(1)).append('}').append(newline());
         return stringBuilder;
     }
+
 }

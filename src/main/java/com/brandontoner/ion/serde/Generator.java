@@ -101,6 +101,16 @@ public abstract class Generator {
         return serializationConfig.indent(i);
     }
 
+    /**
+     * Returns the line separator string.
+     *
+     * @return the line separator string
+     */
+    protected CharSequence newline() {
+        // TODO make this configurable through serializationConfig
+        return System.lineSeparator();
+    }
+
     protected String getTypeName(final Type type) {
         if (type instanceof Class<?>) {
             Class<?> clazz = (Class<?>) type;

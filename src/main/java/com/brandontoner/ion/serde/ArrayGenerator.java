@@ -72,26 +72,26 @@ public final class ArrayGenerator extends Generator {
                      .append(" ionWriter) throws ")
                      .append(getTypeName(IOException.class))
                      .append(" {")
-                     .append(System.lineSeparator());
+                     .append(newline());
 
         stringBuilder.append(indent(2))
                      .append("ionWriter.stepIn(")
                      .append(getTypeName(IonType.class))
                      .append(".LIST);")
-                     .append(System.lineSeparator());
+                     .append(newline());
         stringBuilder.append(indent(2))
                      .append("for (")
                      .append(getTypeName(clazz.getComponentType()))
                      .append(" e : v) {")
-                     .append(System.lineSeparator());
+                     .append(newline());
         stringBuilder.append(indent(3))
                      .append(getGeneratorFactory().getGenerator(clazz.getComponentType())
                                                   .callSerializer("e", "ionWriter"))
                      .append(';')
-                     .append(System.lineSeparator());
-        stringBuilder.append(indent(2)).append('}').append(System.lineSeparator());
-        stringBuilder.append(indent(2)).append("ionWriter.stepOut();").append(System.lineSeparator());
-        stringBuilder.append(indent(1)).append('}').append(System.lineSeparator());
+                     .append(newline());
+        stringBuilder.append(indent(2)).append('}').append(newline());
+        stringBuilder.append(indent(2)).append("ionWriter.stepOut();").append(newline());
+        stringBuilder.append(indent(1)).append('}').append(newline());
         return stringBuilder;
     }
 
@@ -110,20 +110,20 @@ public final class ArrayGenerator extends Generator {
                      .append(" ionReader) throws ")
                      .append(getTypeName(IOException.class))
                      .append(" {")
-                     .append(System.lineSeparator());
+                     .append(newline());
 
         stringBuilder.append(indent(2))
                      .append(getTypeName(listType))
                      .append(" output = ")
                      .append(getGeneratorFactory().getGenerator(listType).callDeserializer("ionReader"))
                      .append(';')
-                     .append(System.lineSeparator());
+                     .append(newline());
         stringBuilder.append(indent(2))
                      .append("return output.toArray(new ")
                      .append(getTypeName(clazz.getComponentType()))
                      .append("[0]);")
-                     .append(System.lineSeparator());
-        stringBuilder.append(indent(1)).append('}').append(System.lineSeparator());
+                     .append(newline());
+        stringBuilder.append(indent(1)).append('}').append(newline());
         return stringBuilder;
     }
 }
