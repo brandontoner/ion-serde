@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.amazon.ion.IonReader;
+import com.amazon.ion.IonType;
 import com.amazon.ion.IonWriter;
 
 public final class ListGenerator extends Generator {
@@ -62,7 +63,11 @@ public final class ListGenerator extends Generator {
                      .append(System.lineSeparator());
 
 
-        stringBuilder.append(indent(2)).append("ionWriter.stepIn(IonType.LIST);").append(System.lineSeparator());
+        stringBuilder.append(indent(2))
+                     .append("ionWriter.stepIn(")
+                     .append(getTypeName(IonType.class))
+                     .append(".LIST);")
+                     .append(System.lineSeparator());
         stringBuilder.append(indent(2))
                      .append("for (")
                      .append(getTypeName(componentType))

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.amazon.ion.IonReader;
+import com.amazon.ion.IonType;
 import com.amazon.ion.IonWriter;
 
 /**
@@ -67,13 +68,13 @@ public final class MapGenerator extends Generator {
                      .append(" {")
                      .append(System.lineSeparator());
 
-        stringBuilder.append(indent(2)).append("ionWriter.stepIn(IonType.LIST);").append(System.lineSeparator());
+        stringBuilder.append(indent(2)).append("ionWriter.stepIn(").append(getTypeName(IonType.class)).append(".LIST);").append(System.lineSeparator());
         stringBuilder.append(indent(2))
                      .append("for (")
                      .append(getTypeName(entryType))
                      .append(" entry : v.entrySet()) {")
                      .append(System.lineSeparator());
-        stringBuilder.append(indent(3)).append("ionWriter.stepIn(IonType.STRUCT);").append(System.lineSeparator());
+        stringBuilder.append(indent(3)).append("ionWriter.stepIn(").append(getTypeName(IonType.class)).append(".STRUCT);").append(System.lineSeparator());
         stringBuilder.append(indent(3)).append("ionWriter.setFieldName(\"key\");").append(System.lineSeparator());
         stringBuilder.append(indent(3))
                      .append(getGeneratorFactory().getGenerator(keyType).callSerializer("entry.getKey()", "ionWriter"))
@@ -113,7 +114,7 @@ public final class MapGenerator extends Generator {
 
         stringBuilder.append(indent(2))
                      .append(getTypeName(mapType))
-                     .append("output = new ")
+                     .append(" output = new ")
                      .append(getTypeName(hashMapType))
                      .append("();")
                      .append(System.lineSeparator());
