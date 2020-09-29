@@ -34,4 +34,14 @@ public final class SerializationConfig {
         // TODO make indentation configurable
         return "    ".repeat(i);
     }
+
+    /**
+     * Returns the line separator string.
+     *
+     * @return the line separator string
+     */
+    public CharSequence newline() {
+        // TODO make this configurable
+        return System.lineSeparator();
+    }
 }

@@ -35,7 +35,7 @@ public final class Serde<T> {
     public static <T> Serde<T> discover(final Class<T> input, final SerializationConfig serializationConfig) {
         Class<T> clazz = serializationConfig.getImplementation(input);
         List<Serde<T>> candidates = new ArrayList<>();
-        for (Constructor constructor : clazz.getConstructors()) {
+        for (final Constructor constructor : clazz.getConstructors()) {
             List<String> paramNames = getParameterNames(constructor);
             java.lang.reflect.Type[] types = constructor.getParameterTypes();
             List<Method> methods = new ArrayList<>();
@@ -59,7 +59,7 @@ public final class Serde<T> {
 
     private static <T> Method findGetter(final Class<T> clazz, final String name, final java.lang.reflect.Type type) {
         List<Method> methods = new ArrayList<>();
-        for (Method method : clazz.getMethods()) {
+        for (final Method method : clazz.getMethods()) {
             if (method.getParameterCount() != 0) {
                 continue;
             }
@@ -72,7 +72,7 @@ public final class Serde<T> {
             return methods.get(0);
         }
 
-        for (Method method : methods) {
+        for (final Method method : methods) {
             if (!method.getName().equalsIgnoreCase("get" + name)) {
                 continue;
             }
@@ -113,7 +113,7 @@ public final class Serde<T> {
         }
 
         List<MethodNode> methods = classNode.methods;
-        for (MethodNode method : methods) {
+        for (final MethodNode method : methods) {
             if ("<init>".equals(method.name) && method.desc.equals(constructorDescriptor)) {
                 Type[] argumentTypes = Type.getArgumentTypes(method.desc);
                 List<String> parameterNames = new ArrayList<>(argumentTypes.length);

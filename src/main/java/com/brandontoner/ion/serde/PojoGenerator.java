@@ -97,7 +97,7 @@ public final class PojoGenerator extends Generator {
                      .append(".STRUCT);")
                      .append(newline());
 
-        for (Param param : params) {
+        for (final Param param : params) {
             String paramName = param.name();
             Type paramType = param.type();
             stringBuilder.append(indent(2))
@@ -136,7 +136,7 @@ public final class PojoGenerator extends Generator {
                      .append(newline());
         stringBuilder.append(indent(2)).append("ionReader.stepIn();").append(newline());
 
-        for (Param param : params) {
+        for (final Param param : params) {
             String paramName = param.name();
             Type paramType = param.type();
 
@@ -157,7 +157,7 @@ public final class PojoGenerator extends Generator {
 
         stringBuilder.append(indent(2)).append("while (ionReader.next() != null) {").append(newline());
         stringBuilder.append(indent(3)).append("switch (ionReader.getFieldName()) {").append(newline());
-        for (Param param : params) {
+        for (final Param param : params) {
             String paramName = param.name();
             Type paramType = param.type();
 

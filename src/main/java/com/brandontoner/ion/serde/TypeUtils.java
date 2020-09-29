@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class TypeUtils {
-    public static ParameterizedType parameterizedType(Class<?> rawType, Type... actualTypeArgument) {
+    public static ParameterizedType parameterizedType(final Class<?> rawType, final Type... actualTypeArgument) {
         return new ParameterizedType() {
             @Override
             public Type[] getActualTypeArguments() {

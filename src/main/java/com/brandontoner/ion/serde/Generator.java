@@ -107,8 +107,7 @@ public abstract class Generator {
      * @return the line separator string
      */
     protected CharSequence newline() {
-        // TODO make this configurable through serializationConfig
-        return System.lineSeparator();
+        return serializationConfig.newline();
     }
 
     protected String getTypeName(final Type type) {
