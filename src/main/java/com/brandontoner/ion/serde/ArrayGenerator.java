@@ -39,17 +39,16 @@ final class ArrayGenerator extends Generator {
 
     @Override
     public CharSequence callSerializer(final String value, final String ionWriterName) {
-        return new StringBuilder().append(getSerializerName(clazz))
-                                  .append('(')
-                                  .append(value)
-                                  .append(", ")
-                                  .append(ionWriterName)
-                                  .append(')');
+        return new StringBuilder(getSerializerName(clazz)).append('(')
+                                                          .append(value)
+                                                          .append(", ")
+                                                          .append(ionWriterName)
+                                                          .append(')');
     }
 
     @Override
     public CharSequence callDeserializer(final String ionReaderName) {
-        return new StringBuilder().append(getDeserializerName(clazz)).append('(').append(ionReaderName).append(')');
+        return new StringBuilder(getDeserializerName(clazz)).append('(').append(ionReaderName).append(')');
     }
 
     @Override

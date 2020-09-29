@@ -172,6 +172,17 @@ public final class IonSerializationGenerator {
         }
 
         /**
+         * Sets the generated source directory (required). Output class file will be at {@code source
+         * directory/package/class name.java}.
+         *
+         * @param sourceDir source directory
+         * @return builder with the source directory set.
+         */
+        public Builder withSourceDirectory(String s) {
+            return withSourceDirectory(Path.of(s));
+        }
+
+        /**
          * Gets the generated source directory.
          *
          * @return generated source directory

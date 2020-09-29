@@ -44,6 +44,9 @@ public final class GeneratorFactory {
                 if (int.class.equals(clazz)) {
                     return new IntGenerator(this, serializationConfig, generationContext);
                 }
+                if (Integer.class.equals(clazz)) {
+                    return new IntegerGenerator(this, serializationConfig, generationContext);
+                }
                 return PojoGenerator.create(this, serializationConfig, generationContext, clazz);
             } else if (type instanceof ParameterizedType) {
                 ParameterizedType parameterizedType = (ParameterizedType) type;

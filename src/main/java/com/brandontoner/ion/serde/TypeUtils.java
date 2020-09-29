@@ -7,6 +7,15 @@ import java.util.Objects;
 
 public class TypeUtils {
     public static ParameterizedType parameterizedType(final Class<?> rawType, final Type... actualTypeArgument) {
+        for (Type type : actualTypeArgument) {
+            if (type instanceof Class<?>) {
+                if (((Class<?>) type).isPrimitive()) {
+                    throw new IllegalArgumentException(
+                            "Primitive types cannot be used as generic type parameters. Given " + Arrays.toString(
+                                    actualTypeArgument));
+                }
+            }
+        }
         return new ParameterizedType() {
             @Override
             public Type[] getActualTypeArguments() {
