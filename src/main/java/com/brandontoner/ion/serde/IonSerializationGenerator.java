@@ -296,6 +296,17 @@ public final class IonSerializationGenerator {
         }
 
         /**
+         * Sets the line separator string.
+         *
+         * @param s line separator string
+         * @return builder with line separator string set
+         */
+        public Builder withLineSeparator(CharSequence s) {
+            mSerializationConfig.withLineSeparator(s);
+            return this;
+        }
+
+        /**
          * Builds the generator.
          *
          * @return generator

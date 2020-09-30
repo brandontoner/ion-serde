@@ -7,6 +7,7 @@ import java.util.Map;
 public final class SerializationConfig {
     private final Map<Class<?>, Class<?>> implementations = new HashMap<>();
     private final Map<Type, Generator> generators = new HashMap<>();
+    private String mNewLine = System.lineSeparator();
 
     public <T> SerializationConfig addImplementation(final Class<T> iface, final Class<? extends T> impl) {
         implementations.put(iface, impl);
@@ -36,12 +37,22 @@ public final class SerializationConfig {
     }
 
     /**
+     * Sets the line separator string.
+     *
+     * @param s line separator string
+     * @return builder with line separator string set
+     */
+    public SerializationConfig withLineSeparator(CharSequence s) {
+        mNewLine = s.toString();
+        return this;
+    }
+
+    /**
      * Returns the line separator string.
      *
      * @return the line separator string
      */
     public CharSequence newline() {
-        // TODO make this configurable
-        return System.lineSeparator();
+        return mNewLine;
     }
 }
