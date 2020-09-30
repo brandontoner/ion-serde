@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.amazon.ion.IonType;
+
 public final class GeneratorFactory {
     private final SerializationConfig serializationConfig;
     private final GenerationContext generationContext;
@@ -44,8 +46,46 @@ public final class GeneratorFactory {
                 if (int.class.equals(clazz)) {
                     return new IntGenerator(this, serializationConfig, generationContext);
                 }
+                if (long.class.equals(clazz)) {
+                    return new LongGenerator(this, serializationConfig, generationContext);
+                }
+                if (boolean.class.equals(clazz)) {
+                    return new BooleanGenerator(this, serializationConfig, generationContext);
+                }
+                if (double.class.equals(clazz)) {
+                    return new DoubleGenerator(this, serializationConfig, generationContext);
+                }
                 if (Integer.class.equals(clazz)) {
-                    return new IntegerGenerator(this, serializationConfig, generationContext);
+                    return new BoxedPrimitiveGenerator(this,
+                                                       serializationConfig,
+                                                       generationContext,
+                                                       int.class,
+                                                       Integer.class,
+                                                       IonType.INT);
+                }
+                if (Long.class.equals(clazz)) {
+                    return new BoxedPrimitiveGenerator(this,
+                                                       serializationConfig,
+                                                       generationContext,
+                                                       long.class,
+                                                       Long.class,
+                                                       IonType.INT);
+                }
+                if (Boolean.class.equals(clazz)) {
+                    return new BoxedPrimitiveGenerator(this,
+                                                       serializationConfig,
+                                                       generationContext,
+                                                       boolean.class,
+                                                       Boolean.class,
+                                                       IonType.BOOL);
+                }
+                if (Double.class.equals(clazz)) {
+                    return new BoxedPrimitiveGenerator(this,
+                                                       serializationConfig,
+                                                       generationContext,
+                                                       double.class,
+                                                       Double.class,
+                                                       IonType.DECIMAL);
                 }
                 return PojoGenerator.create(this, serializationConfig, generationContext, clazz);
             } else if (type instanceof ParameterizedType) {

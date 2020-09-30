@@ -143,6 +143,10 @@ public abstract class Generator {
             if (clazz.isArray()) {
                 return getSerializerName(clazz.getComponentType()) + "Array";
             }
+            Class<?> primitive = TypeUtils.getUnboxedType(clazz);
+            if (primitive != null) {
+                return "serializeBoxed" + camelCase(getTypeName(primitive));
+            }
             return "serialize" + camelCase(getTypeName(type));
         } else if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;

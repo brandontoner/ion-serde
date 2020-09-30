@@ -1,10 +1,9 @@
 package com.brandontoner.ion.serde;
 
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 import com.amazon.ion.IonReader;
@@ -17,8 +16,6 @@ import com.amazon.ion.IonWriter;
 final class ArrayGenerator extends Generator {
     /** Array type. */
     private final Class<?> clazz;
-    /** Equivalent list type. */
-    private final ParameterizedType listType;
 
     /**
      * Constructor.
@@ -34,7 +31,6 @@ final class ArrayGenerator extends Generator {
                    final Class<?> aClass) {
         super(generatorFactory, serializationConfig, generationContext);
         this.clazz = aClass;
-        listType = TypeUtils.parameterizedType(List.class, aClass.getComponentType());
     }
 
     @Override
@@ -53,7 +49,7 @@ final class ArrayGenerator extends Generator {
 
     @Override
     public Collection<Type> dependencies() {
-        return Set.of(listType);
+        return Set.of();
     }
 
     @Override
@@ -124,17 +120,38 @@ final class ArrayGenerator extends Generator {
         stringBuilder.append(indent(3)).append("return null;").append(newline());
         stringBuilder.append(indent(2)).append('}').append(newline());
 
+        stringBuilder.append(indent(2)).append("ionReader.stepIn();").append(newline());
         stringBuilder.append(indent(2))
-                     .append(getTypeName(listType))
-                     .append(" output = ")
-                     .append(getGeneratorFactory().getGenerator(listType).callDeserializer("ionReader"))
+                     .append(getTypeName(clazz))
+                     .append(" output = new ")
+                     .append(getTypeName(clazz.getComponentType()))
+                     .append("[10];")
+                     .append(newline());
+        stringBuilder.append(indent(2)).append(getTypeName(int.class)).append(" count = 0;").append(newline());
+        stringBuilder.append(indent(2)).append("while (ionReader.next() != null) {").append(newline());
+        stringBuilder.append(indent(3))
+                     .append(getTypeName(clazz.getComponentType()))
+                     .append(" element = ")
+                     .append(getGeneratorFactory().getGenerator(clazz.getComponentType()).callDeserializer("ionReader"))
                      .append(';')
                      .append(newline());
-        stringBuilder.append(indent(2))
-                     .append("return output.toArray(new ")
-                     .append(getTypeName(clazz.getComponentType()))
-                     .append("[0]);")
+        stringBuilder.append(indent(3)).append("if (output.length == count) {").append(newline());
+        stringBuilder.append(indent(4))
+                     .append("output = ")
+                     .append(getTypeName(Arrays.class))
+                     .append(".copyOf(output, count * 2);")
                      .append(newline());
+        stringBuilder.append(indent(3)).append('}').append(newline());
+        stringBuilder.append(indent(3)).append("output[count++] = element;").append(newline());
+        stringBuilder.append(indent(2)).append('}').append(newline());
+        stringBuilder.append(indent(2))
+                     .append("output = ")
+                     .append(getTypeName(Arrays.class))
+                     .append(".copyOfRange(output, 0, count);")
+                     .append(newline());
+
+        stringBuilder.append(indent(2)).append("ionReader.stepOut();").append(newline());
+        stringBuilder.append(indent(2)).append("return output;").append(newline());
         stringBuilder.append(indent(1)).append('}').append(newline());
         return stringBuilder;
     }
