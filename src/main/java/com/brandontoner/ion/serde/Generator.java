@@ -29,6 +29,14 @@ public abstract class Generator {
         this.generatorFactory = generatorFactory;
     }
 
+    public static String quote(final String paramName) {
+        return '"' + paramName + '"';
+    }
+
+    public static String camelCase(final String typeName) {
+        return Character.toUpperCase(typeName.charAt(0)) + typeName.substring(1);
+    }
+
     /**
      * Returns a how to call the serializer.
      *
@@ -159,14 +167,5 @@ public abstract class Generator {
         } else {
             throw new UnsupportedOperationException();
         }
-    }
-
-
-    public static String quote(final String paramName) {
-        return '"' + paramName + '"';
-    }
-
-    public static String camelCase(final String typeName) {
-        return Character.toUpperCase(typeName.charAt(0)) + typeName.substring(1);
     }
 }

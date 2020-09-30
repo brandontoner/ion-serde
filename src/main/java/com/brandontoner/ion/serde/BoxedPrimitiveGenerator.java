@@ -1,18 +1,15 @@
 package com.brandontoner.ion.serde;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Set;
 
-import com.amazon.ion.IonReader;
 import com.amazon.ion.IonType;
-import com.amazon.ion.IonWriter;
 
 /**
  * Serializer for boxed primitives.
  */
-final class BoxedPrimitiveGenerator extends Generator {
+final class BoxedPrimitiveGenerator extends MethodGenerator {
     private final Class<?> mBoxedClass;
     private final Class<?> mPrimitiveClass;
     private final IonType mIonType;
@@ -34,25 +31,11 @@ final class BoxedPrimitiveGenerator extends Generator {
                                 final Class<T> primitiveClass,
                                 final Class<T> boxedClass,
                                 final IonType ionType) {
-        super(generatorFactory, serializationConfig, generationContext);
+        super(generatorFactory, serializationConfig, generationContext, boxedClass);
         // TODO make sure types make sense
         mPrimitiveClass = primitiveClass;
         mBoxedClass = boxedClass;
         mIonType = ionType;
-    }
-
-    @Override
-    public CharSequence callSerializer(final String value, final String ionWriterName) {
-        return new StringBuilder(getSerializerName(mBoxedClass)).append('(')
-                                                                .append(value)
-                                                                .append(", ")
-                                                                .append(ionWriterName)
-                                                                .append(')');
-    }
-
-    @Override
-    public CharSequence callDeserializer(final String ionReaderName) {
-        return new StringBuilder(getDeserializerName(mBoxedClass)).append('(').append(ionReaderName).append(')');
     }
 
     @Override
@@ -61,22 +44,8 @@ final class BoxedPrimitiveGenerator extends Generator {
     }
 
     @Override
-    public CharSequence generateSerializer() {
+    public CharSequence generateSerializerBody() {
         StringBuilder stringBuilder = new StringBuilder();
-
-        // Method declaration line
-        stringBuilder.append(indent(1))
-                     .append("public static void ")
-                     .append(getSerializerName(mBoxedClass))
-                     .append('(')
-                     .append(getTypeName(mBoxedClass))
-                     .append(" v, ")
-                     .append(getTypeName(IonWriter.class))
-                     .append(" ionWriter) throws ")
-                     .append(getTypeName(IOException.class))
-                     .append(" {")
-                     .append(newline());
-
         stringBuilder.append(indent(2)).append("if (v == null) {").append(newline());
         stringBuilder.append(indent(3))
                      .append("ionWriter.writeNull(")
@@ -91,26 +60,12 @@ final class BoxedPrimitiveGenerator extends Generator {
                      .append(';')
                      .append(newline());
         stringBuilder.append(indent(2)).append('}').append(newline());
-        stringBuilder.append(indent(1)).append('}').append(newline());
         return stringBuilder;
     }
 
     @Override
-    public CharSequence generateDeserializer() {
+    public CharSequence generateDeserializerBody() {
         StringBuilder stringBuilder = new StringBuilder();
-
-        // Method declaration line
-        stringBuilder.append(indent(1))
-                     .append("public static ")
-                     .append(getTypeName(mBoxedClass))
-                     .append(' ')
-                     .append(getDeserializerName(mBoxedClass))
-                     .append('(')
-                     .append(getTypeName(IonReader.class))
-                     .append(" ionReader) throws ")
-                     .append(getTypeName(IOException.class))
-                     .append(" {")
-                     .append(newline());
         stringBuilder.append(indent(2)).append("if (ionReader.isNullValue()) {").append(newline());
         stringBuilder.append(indent(3)).append("return null;").append(newline());
         stringBuilder.append(indent(2)).append("} else {").append(newline());
@@ -120,7 +75,6 @@ final class BoxedPrimitiveGenerator extends Generator {
                      .append(';')
                      .append(newline());
         stringBuilder.append(indent(2)).append('}').append(newline());
-        stringBuilder.append(indent(1)).append('}').append(newline());
         return stringBuilder;
     }
 }

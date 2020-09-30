@@ -1,6 +1,5 @@
 package com.brandontoner.ion.serde;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -8,11 +7,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.amazon.ion.IonReader;
 import com.amazon.ion.IonType;
-import com.amazon.ion.IonWriter;
 
-final class PojoGenerator extends Generator {
+final class PojoGenerator extends MethodGenerator {
     private final Type serializationType;
     private final Type deserializationType;
     private final List<Param> params;
@@ -23,7 +20,7 @@ final class PojoGenerator extends Generator {
                           final SerializationConfig serializationConfig,
                           final GenerationContext generationContext,
                           final GeneratorFactory generatorFactory) {
-        super(generatorFactory, serializationConfig, generationContext);
+        super(generatorFactory, serializationConfig, generationContext, serializationType, deserializationType);
         // TODO make sure the types make sense
         // * deserializationType must be a subclass / implement serialization type
         // * deserializationType must have a constructor with the provided parameters
@@ -50,20 +47,6 @@ final class PojoGenerator extends Generator {
                                  generatorFactory);
     }
 
-    @Override
-    public CharSequence callSerializer(final String value, final String ionWriterName) {
-        return new StringBuilder(getSerializerName(serializationType)).append('(')
-                                                                      .append(value)
-                                                                      .append(", ")
-                                                                      .append(ionWriterName)
-                                                                      .append(')');
-    }
-
-    @Override
-    public CharSequence callDeserializer(final String ionReaderName) {
-        return new StringBuilder(getDeserializerName(serializationType)).append('(').append(ionReaderName).append(')');
-    }
-
     /**
      * Gets the collection of types that must be serialized to serialize this type.
      *
@@ -75,22 +58,8 @@ final class PojoGenerator extends Generator {
     }
 
     @Override
-    public CharSequence generateSerializer() {
+    public CharSequence generateSerializerBody() {
         StringBuilder stringBuilder = new StringBuilder();
-
-        // Method declaration line
-        stringBuilder.append(indent(1))
-                     .append("public static void ")
-                     .append(getSerializerName(serializationType))
-                     .append('(')
-                     .append(getTypeName(serializationType))
-                     .append(" v, ")
-                     .append(getTypeName(IonWriter.class))
-                     .append(" ionWriter) throws ")
-                     .append(getTypeName(IOException.class))
-                     .append(" {")
-                     .append(newline());
-
         stringBuilder.append(indent(2)).append("if (v == null) {").append(newline());
         stringBuilder.append(indent(3))
                      .append("ionWriter.writeNull(")
@@ -123,27 +92,12 @@ final class PojoGenerator extends Generator {
 
         }
         stringBuilder.append(indent(2)).append("ionWriter.stepOut();").append(newline());
-        stringBuilder.append(indent(1)).append('}').append(newline());
         return stringBuilder;
     }
 
     @Override
-    public CharSequence generateDeserializer() {
+    public CharSequence generateDeserializerBody() {
         StringBuilder stringBuilder = new StringBuilder();
-
-        // Method declaration line
-        stringBuilder.append(indent(1))
-                     .append("public static ")
-                     .append(getTypeName(serializationType))
-                     .append(' ')
-                     .append(getDeserializerName(serializationType))
-                     .append('(')
-                     .append(getTypeName(IonReader.class))
-                     .append(" ionReader) throws ")
-                     .append(getTypeName(IOException.class))
-                     .append(" {")
-                     .append(newline());
-
         stringBuilder.append(indent(2)).append("if (ionReader.isNullValue()) {").append(newline());
         stringBuilder.append(indent(3)).append("return null;").append(newline());
         stringBuilder.append(indent(2)).append('}').append(newline());
@@ -200,8 +154,6 @@ final class PojoGenerator extends Generator {
                      .append(params.stream().map(Param::name).collect(Collectors.joining(", ")))
                      .append(");")
                      .append(newline());
-
-        stringBuilder.append(indent(1)).append('}').append(newline());
         return stringBuilder;
     }
 }

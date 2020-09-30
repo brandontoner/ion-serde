@@ -58,6 +58,15 @@ public final class IonSerializationGenerator {
     }
 
     /**
+     * Gets a new builder.
+     *
+     * @return new builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
      * Generates the serialization / deserialization source.
      *
      * @throws IOException on error writing to file
@@ -98,15 +107,6 @@ public final class IonSerializationGenerator {
                                              .collect(Collectors.joining(mSerializationConfig.newline())));
             printWriter.println("}");
         }
-    }
-
-    /**
-     * Gets a new builder.
-     *
-     * @return new builder
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     /** Builder for IonSerializationGenerator. */
