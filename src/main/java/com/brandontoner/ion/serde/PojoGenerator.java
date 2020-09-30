@@ -91,6 +91,15 @@ final class PojoGenerator extends Generator {
                      .append(" {")
                      .append(newline());
 
+        stringBuilder.append(indent(2)).append("if (v == null) {").append(newline());
+        stringBuilder.append(indent(3))
+                     .append("ionWriter.writeNull(")
+                     .append(getTypeName(IonType.class))
+                     .append(".STRUCT);")
+                     .append(newline());
+        stringBuilder.append(indent(3)).append("return;").append(newline());
+        stringBuilder.append(indent(2)).append('}').append(newline());
+
         stringBuilder.append(indent(2))
                      .append("ionWriter.stepIn(")
                      .append(getTypeName(IonType.class))
@@ -134,6 +143,11 @@ final class PojoGenerator extends Generator {
                      .append(getTypeName(IOException.class))
                      .append(" {")
                      .append(newline());
+
+        stringBuilder.append(indent(2)).append("if (ionReader.isNullValue()) {").append(newline());
+        stringBuilder.append(indent(3)).append("return null;").append(newline());
+        stringBuilder.append(indent(2)).append('}').append(newline());
+
         stringBuilder.append(indent(2)).append("ionReader.stepIn();").append(newline());
 
         for (final Param param : params) {
@@ -161,11 +175,7 @@ final class PojoGenerator extends Generator {
             String paramName = param.name();
             Type paramType = param.type();
 
-            stringBuilder.append(indent(4))
-                         .append("case ")
-                         .append(quote(paramName))
-                         .append(':')
-                         .append(newline());
+            stringBuilder.append(indent(4)).append("case ").append(quote(paramName)).append(':').append(newline());
             stringBuilder.append(indent(5))
                          .append(paramName)
                          .append(" = ")

@@ -73,6 +73,15 @@ final class ArrayGenerator extends Generator {
                      .append(" {")
                      .append(newline());
 
+        stringBuilder.append(indent(2)).append("if (v == null) {").append(newline());
+        stringBuilder.append(indent(3))
+                     .append("ionWriter.writeNull(")
+                     .append(getTypeName(IonType.class))
+                     .append(".LIST);")
+                     .append(newline());
+        stringBuilder.append(indent(3)).append("return;").append(newline());
+        stringBuilder.append(indent(2)).append('}').append(newline());
+
         stringBuilder.append(indent(2))
                      .append("ionWriter.stepIn(")
                      .append(getTypeName(IonType.class))
@@ -110,6 +119,10 @@ final class ArrayGenerator extends Generator {
                      .append(getTypeName(IOException.class))
                      .append(" {")
                      .append(newline());
+
+        stringBuilder.append(indent(2)).append("if (ionReader.isNullValue()) {").append(newline());
+        stringBuilder.append(indent(3)).append("return null;").append(newline());
+        stringBuilder.append(indent(2)).append('}').append(newline());
 
         stringBuilder.append(indent(2))
                      .append(getTypeName(listType))
