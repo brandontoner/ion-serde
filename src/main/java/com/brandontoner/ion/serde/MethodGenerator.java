@@ -7,6 +7,9 @@ import com.amazon.ion.IonReader;
 import com.amazon.ion.IonWriter;
 
 public abstract class MethodGenerator extends Generator {
+    private static final String ION_READER_NAME = "ionReader";
+    private static final String ION_WRITER_NAME = "ionWriter";
+    private static final String VALUE_NAME = "v";
     private final Type mInputType;
     private final Type mOutputType;
 
@@ -51,13 +54,17 @@ public abstract class MethodGenerator extends Generator {
                      .append(getSerializerName(mInputType))
                      .append('(')
                      .append(getTypeName(mInputType))
-                     .append(" v, ")
+                     .append(' ')
+                     .append(VALUE_NAME)
+                     .append(", ")
                      .append(getTypeName(IonWriter.class))
-                     .append(" ionWriter) throws ")
+                     .append(' ')
+                     .append(ION_WRITER_NAME)
+                     .append(") throws ")
                      .append(getTypeName(IOException.class))
                      .append(" {")
                      .append(newline());
-        stringBuilder.append(generateSerializerBody());
+        stringBuilder.append(generateSerializerBody(VALUE_NAME, ION_WRITER_NAME));
         stringBuilder.append(indent(1)).append('}').append(newline());
         return stringBuilder;
     }
@@ -74,11 +81,13 @@ public abstract class MethodGenerator extends Generator {
                      .append(getDeserializerName(mInputType))
                      .append('(')
                      .append(getTypeName(IonReader.class))
-                     .append(" ionReader) throws ")
+                     .append(' ')
+                     .append(ION_READER_NAME)
+                     .append(") throws ")
                      .append(getTypeName(IOException.class))
                      .append(" {")
                      .append(newline());
-        stringBuilder.append(generateDeserializerBody());
+        stringBuilder.append(generateDeserializerBody(ION_READER_NAME));
         stringBuilder.append(indent(1)).append('}').append(newline());
         return stringBuilder;
     }
@@ -86,14 +95,17 @@ public abstract class MethodGenerator extends Generator {
     /**
      * Generates the body of the serialize method.
      *
+     * @param valueName     name of the value variable
+     * @param ionWriterName name of the ion writer variable
      * @return serialize method body
      */
-    protected abstract CharSequence generateSerializerBody();
+    protected abstract CharSequence generateSerializerBody(String valueName, String ionWriterName);
 
     /**
      * Generates the body of the deserialize method.
      *
+     * @param ionReaderName name of the ion reader variable
      * @return deserialize method body
      */
-    protected abstract CharSequence generateDeserializerBody();
+    protected abstract CharSequence generateDeserializerBody(String ionReaderName);
 }

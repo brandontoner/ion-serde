@@ -178,7 +178,7 @@ public final class IonSerializationGenerator {
          * @param sourceDir source directory
          * @return builder with the source directory set.
          */
-        public Builder withSourceDirectory(String s) {
+        public Builder withSourceDirectory(final String s) {
             return withSourceDirectory(Path.of(s));
         }
 
@@ -301,7 +301,7 @@ public final class IonSerializationGenerator {
          * @param s line separator string
          * @return builder with line separator string set
          */
-        public Builder withLineSeparator(CharSequence s) {
+        public Builder withLineSeparator(final CharSequence s) {
             mSerializationConfig.withLineSeparator(s);
             return this;
         }

@@ -42,7 +42,7 @@ public final class SerializationConfig {
      * @param s line separator string
      * @return builder with line separator string set
      */
-    public SerializationConfig withLineSeparator(CharSequence s) {
+    public SerializationConfig withLineSeparator(final CharSequence s) {
         mNewLine = s.toString();
         return this;
     }

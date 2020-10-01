@@ -34,7 +34,7 @@ final class MapGenerator extends MethodGenerator {
 
 
     @Override
-    public CharSequence generateSerializerBody() {
+    public CharSequence generateSerializerBody(final String valueName, final String ionWriterName) {
         Type keyType = mapType.getActualTypeArguments()[0];
         Type valueType = mapType.getActualTypeArguments()[1];
         StringBuilder stringBuilder = new StringBuilder();
@@ -80,7 +80,7 @@ final class MapGenerator extends MethodGenerator {
     }
 
     @Override
-    public CharSequence generateDeserializerBody() {
+    public CharSequence generateDeserializerBody(final String ionReaderName) {
         Type keyType = mapType.getActualTypeArguments()[0];
         Type valueType = mapType.getActualTypeArguments()[1];
         StringBuilder stringBuilder = new StringBuilder();

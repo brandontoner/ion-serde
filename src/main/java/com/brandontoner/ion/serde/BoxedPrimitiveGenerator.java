@@ -44,7 +44,7 @@ final class BoxedPrimitiveGenerator extends MethodGenerator {
     }
 
     @Override
-    public CharSequence generateSerializerBody() {
+    public CharSequence generateSerializerBody(final String valueName, final String ionWriterName) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(indent(2)).append("if (v == null) {").append(newline());
         stringBuilder.append(indent(3))
@@ -64,7 +64,7 @@ final class BoxedPrimitiveGenerator extends MethodGenerator {
     }
 
     @Override
-    public CharSequence generateDeserializerBody() {
+    public CharSequence generateDeserializerBody(final String ionReaderName) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(indent(2)).append("if (ionReader.isNullValue()) {").append(newline());
         stringBuilder.append(indent(3)).append("return null;").append(newline());
