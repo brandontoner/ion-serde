@@ -1005,17 +1005,16 @@ public final class Serializers {
     public static void serializeByteArray(byte[] v, IonWriter ionWriter) throws IOException {
         if (v == null) {
             ionWriter.writeNull(IonType.BLOB);
-        } else {
-            ionWriter.writeBlob(v);
+            return;
         }
+        ionWriter.writeBlob(v);
     }
 
     public static byte[] deserializeByteArray(IonReader ionReader) throws IOException {
         if (ionReader.isNullValue()) {
             return null;
-        } else {
-            return ionReader.newBytes();
         }
+        return ionReader.newBytes();
     }
 
     public static void serializeCharSequence(CharSequence v, IonWriter ionWriter) throws IOException {

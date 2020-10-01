@@ -31,15 +31,21 @@ final class CharSequenceGenerator extends MethodGenerator {
     @Override
     protected CharSequence generateSerializerBody(final String valueName, final String ionWriterName) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(indent(2)).append("if (v == null) {").append(newline());
+        stringBuilder.append(indent(2)).append("if (").append(valueName).append(" == null) {").append(newline());
         stringBuilder.append(indent(3))
-                     .append("ionWriter.writeNull(")
+                     .append(ionWriterName)
+                     .append(".writeNull(")
                      .append(getTypeName(IonType.class))
                      .append(".STRING")
                      .append(");")
                      .append(newline());
         stringBuilder.append(indent(2)).append("} else {").append(newline());
-        stringBuilder.append(indent(3)).append("ionWriter.writeString(v.toString());").append(newline());
+        stringBuilder.append(indent(3))
+                     .append(ionWriterName)
+                     .append(".writeString(")
+                     .append(valueName)
+                     .append(".toString());")
+                     .append(newline());
         stringBuilder.append(indent(2)).append('}').append(newline());
         return stringBuilder;
     }
@@ -47,10 +53,18 @@ final class CharSequenceGenerator extends MethodGenerator {
     @Override
     protected CharSequence generateDeserializerBody(final String ionReaderName) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(indent(2)).append("if (ionReader.isNullValue()) {").append(newline());
+        stringBuilder.append(indent(2))
+                     .append("if (")
+                     .append(ionReaderName)
+                     .append(".isNullValue()) {")
+                     .append(newline());
         stringBuilder.append(indent(3)).append("return null;").append(newline());
         stringBuilder.append(indent(2)).append("} else {").append(newline());
-        stringBuilder.append(indent(3)).append("return ionReader.stringValue();").append(newline());
+        stringBuilder.append(indent(3))
+                     .append("return ")
+                     .append(ionReaderName)
+                     .append(".stringValue();")
+                     .append(newline());
         stringBuilder.append(indent(2)).append('}').append(newline());
         return stringBuilder;
     }

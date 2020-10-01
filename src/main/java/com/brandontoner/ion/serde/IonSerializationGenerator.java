@@ -95,17 +95,17 @@ public final class IonSerializationGenerator {
 
         try (OutputStream outputStream = Files.newOutputStream(outputFile);
              PrintWriter printWriter = new PrintWriter(outputStream, false, StandardCharsets.UTF_8)) {
-            printWriter.println("package " + mPackage + ';');
-            printWriter.println();
+            printWriter.print("package " + mPackage + ';' + mSerializationConfig.newline());
+            printWriter.print(mSerializationConfig.newline());
             for (final Class<?> anImport : mGenerationContext.imports()) {
-                printWriter.println("import " + anImport.getName() + ';');
+                printWriter.print("import " + anImport.getName() + ';' + mSerializationConfig.newline());
             }
-            printWriter.println();
-            printWriter.println("public final class " + mClassName + " {");
+            printWriter.print(mSerializationConfig.newline());
+            printWriter.print("public final class " + mClassName + " {" + mSerializationConfig.newline());
             printWriter.print(generatedSource.stream()
                                              .filter(Objects::nonNull)
                                              .collect(Collectors.joining(mSerializationConfig.newline())));
-            printWriter.println("}");
+            printWriter.print("}" + mSerializationConfig.newline());
         }
     }
 

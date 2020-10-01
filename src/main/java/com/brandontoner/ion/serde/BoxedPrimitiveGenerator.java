@@ -46,9 +46,10 @@ final class BoxedPrimitiveGenerator extends MethodGenerator {
     @Override
     public CharSequence generateSerializerBody(final String valueName, final String ionWriterName) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(indent(2)).append("if (v == null) {").append(newline());
+        stringBuilder.append(indent(2)).append("if (").append(valueName).append(" == null) {").append(newline());
         stringBuilder.append(indent(3))
-                     .append("ionWriter.writeNull(")
+                     .append(ionWriterName)
+                     .append(".writeNull(")
                      .append(getTypeName(IonType.class))
                      .append('.')
                      .append(mIonType.name())
@@ -56,7 +57,7 @@ final class BoxedPrimitiveGenerator extends MethodGenerator {
                      .append(newline());
         stringBuilder.append(indent(2)).append("} else {").append(newline());
         stringBuilder.append(indent(3))
-                     .append(getGeneratorFactory().getGenerator(mPrimitiveClass).callSerializer("v", "ionWriter"))
+                     .append(getGeneratorFactory().getGenerator(mPrimitiveClass).callSerializer(valueName, ionWriterName))
                      .append(';')
                      .append(newline());
         stringBuilder.append(indent(2)).append('}').append(newline());
@@ -66,12 +67,16 @@ final class BoxedPrimitiveGenerator extends MethodGenerator {
     @Override
     public CharSequence generateDeserializerBody(final String ionReaderName) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(indent(2)).append("if (ionReader.isNullValue()) {").append(newline());
+        stringBuilder.append(indent(2))
+                     .append("if (")
+                     .append(ionReaderName)
+                     .append(".isNullValue()) {")
+                     .append(newline());
         stringBuilder.append(indent(3)).append("return null;").append(newline());
         stringBuilder.append(indent(2)).append("} else {").append(newline());
         stringBuilder.append(indent(3))
                      .append("return ")
-                     .append(getGeneratorFactory().getGenerator(mPrimitiveClass).callDeserializer("ionReader"))
+                     .append(getGeneratorFactory().getGenerator(mPrimitiveClass).callDeserializer(ionReaderName))
                      .append(';')
                      .append(newline());
         stringBuilder.append(indent(2)).append('}').append(newline());

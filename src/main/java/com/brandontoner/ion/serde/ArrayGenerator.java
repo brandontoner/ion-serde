@@ -10,7 +10,7 @@ import com.amazon.ion.IonType;
 /**
  * Generates serialization for arrays.
  */
-final class ArrayGenerator extends MethodGenerator {
+final class ArrayGenerator extends NullableGenerator {
     /** Array type. */
     private final Class<?> clazz;
 
@@ -26,7 +26,7 @@ final class ArrayGenerator extends MethodGenerator {
                    final SerializationConfig serializationConfig,
                    final GenerationContext generationContext,
                    final Class<?> aClass) {
-        super(generatorFactory, serializationConfig, generationContext, aClass);
+        super(generatorFactory, serializationConfig, generationContext, aClass, IonType.LIST);
         this.clazz = aClass;
     }
 
@@ -36,45 +36,35 @@ final class ArrayGenerator extends MethodGenerator {
     }
 
     @Override
-    public CharSequence generateSerializerBody(final String valueName, final String ionWriterName) {
+    public CharSequence generateNonNullSerializerBody(final String valueName, final String ionWriterName) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(indent(2)).append("if (v == null) {").append(newline());
-        stringBuilder.append(indent(3))
-                     .append("ionWriter.writeNull(")
-                     .append(getTypeName(IonType.class))
-                     .append(".LIST);")
-                     .append(newline());
-        stringBuilder.append(indent(3)).append("return;").append(newline());
-        stringBuilder.append(indent(2)).append('}').append(newline());
-
         stringBuilder.append(indent(2))
-                     .append("ionWriter.stepIn(")
+                     .append(ionWriterName)
+                     .append(".stepIn(")
                      .append(getTypeName(IonType.class))
                      .append(".LIST);")
                      .append(newline());
         stringBuilder.append(indent(2))
                      .append("for (")
                      .append(getTypeName(clazz.getComponentType()))
-                     .append(" e : v) {")
+                     .append(" e : ")
+                     .append(valueName)
+                     .append(") {")
                      .append(newline());
         stringBuilder.append(indent(3))
                      .append(getGeneratorFactory().getGenerator(clazz.getComponentType())
-                                                  .callSerializer("e", "ionWriter"))
+                                                  .callSerializer("e", ionWriterName))
                      .append(';')
                      .append(newline());
         stringBuilder.append(indent(2)).append('}').append(newline());
-        stringBuilder.append(indent(2)).append("ionWriter.stepOut();").append(newline());
+        stringBuilder.append(indent(2)).append(ionWriterName).append(".stepOut();").append(newline());
         return stringBuilder;
     }
 
     @Override
-    public CharSequence generateDeserializerBody(final String ionReaderName) {
+    public final CharSequence generateNonNullDeserializerBody(final String ionReaderName) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(indent(2)).append("if (ionReader.isNullValue()) {").append(newline());
-        stringBuilder.append(indent(3)).append("return null;").append(newline());
-        stringBuilder.append(indent(2)).append('}').append(newline());
-
-        stringBuilder.append(indent(2)).append("ionReader.stepIn();").append(newline());
+        stringBuilder.append(indent(2)).append(ionReaderName).append(".stepIn();").append(newline());
         stringBuilder.append(indent(2))
                      .append(getTypeName(clazz))
                      .append(" output = new ")
@@ -82,11 +72,16 @@ final class ArrayGenerator extends MethodGenerator {
                      .append("[10];")
                      .append(newline());
         stringBuilder.append(indent(2)).append(getTypeName(int.class)).append(" count = 0;").append(newline());
-        stringBuilder.append(indent(2)).append("while (ionReader.next() != null) {").append(newline());
+        stringBuilder.append(indent(2))
+                     .append("while (")
+                     .append(ionReaderName)
+                     .append(".next() != null) {")
+                     .append(newline());
         stringBuilder.append(indent(3))
                      .append(getTypeName(clazz.getComponentType()))
                      .append(" element = ")
-                     .append(getGeneratorFactory().getGenerator(clazz.getComponentType()).callDeserializer("ionReader"))
+                     .append(getGeneratorFactory().getGenerator(clazz.getComponentType())
+                                                  .callDeserializer(ionReaderName))
                      .append(';')
                      .append(newline());
         stringBuilder.append(indent(3)).append("if (output.length == count) {").append(newline());
@@ -104,7 +99,7 @@ final class ArrayGenerator extends MethodGenerator {
                      .append(".copyOfRange(output, 0, count);")
                      .append(newline());
 
-        stringBuilder.append(indent(2)).append("ionReader.stepOut();").append(newline());
+        stringBuilder.append(indent(2)).append(ionReaderName).append(".stepOut();").append(newline());
         stringBuilder.append(indent(2)).append("return output;").append(newline());
         return stringBuilder;
     }
