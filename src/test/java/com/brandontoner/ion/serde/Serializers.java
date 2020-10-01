@@ -3,12 +3,14 @@ package com.brandontoner.ion.serde;
 import com.amazon.ion.IonReader;
 import com.amazon.ion.IonType;
 import com.amazon.ion.IonWriter;
+import com.amazon.ion.Timestamp;
 import com.brandontoner.ion.serde.testtypes.BlobTestClass;
 import com.brandontoner.ion.serde.testtypes.BooleanTestClass;
 import com.brandontoner.ion.serde.testtypes.DoubleTestClass;
 import com.brandontoner.ion.serde.testtypes.IntTestClass;
 import com.brandontoner.ion.serde.testtypes.LongTestClass;
 import com.brandontoner.ion.serde.testtypes.StringTestClass;
+import com.brandontoner.ion.serde.testtypes.TemporalTestClass;
 import java.io.IOException;
 import java.lang.Boolean;
 import java.lang.CharSequence;
@@ -16,6 +18,9 @@ import java.lang.Double;
 import java.lang.Integer;
 import java.lang.Long;
 import java.lang.String;
+import java.math.BigDecimal;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -361,6 +366,36 @@ public final class Serializers {
         }
         ionReader.stepOut();
         return new StringTestClass(aString);
+    }
+
+    public static void serializeTemporalTestClass(TemporalTestClass v, IonWriter ionWriter) throws IOException {
+        if (v == null) {
+            ionWriter.writeNull(IonType.STRUCT);
+            return;
+        }
+        ionWriter.stepIn(IonType.STRUCT);
+        ionWriter.setFieldName("aZonedDateTime");
+        serializeZonedDateTime(v.getaZonedDateTime(), ionWriter);
+        ionWriter.stepOut();
+    }
+
+    public static TemporalTestClass deserializeTemporalTestClass(IonReader ionReader) throws IOException {
+        if (ionReader.isNullValue()) {
+            return null;
+        }
+        ionReader.stepIn();
+        ZonedDateTime aZonedDateTime = null;
+        boolean hasAZonedDateTime = false;
+        while (ionReader.next() != null) {
+            switch (ionReader.getFieldName()) {
+                case "aZonedDateTime":
+                    aZonedDateTime = deserializeZonedDateTime(ionReader);
+                    hasAZonedDateTime = true;
+                    break;
+            }
+        }
+        ionReader.stepOut();
+        return new TemporalTestClass(aZonedDateTime);
     }
 
     public static void serializeBoxedInt(Integer v, IonWriter ionWriter) throws IOException {
@@ -997,5 +1032,25 @@ public final class Serializers {
         } else {
             return ionReader.stringValue();
         }
+    }
+
+    public static void serializeZonedDateTime(ZonedDateTime v, IonWriter ionWriter) throws IOException {
+        if (v == null) {
+            ionWriter.writeNull(IonType.TIMESTAMP);
+            return;
+        }
+        ionWriter.writeTimestamp(Timestamp.forEpochSecond(v.toEpochSecond(), v.getNano(), v.getOffset().getTotalSeconds() / 60));
+    }
+
+    public static ZonedDateTime deserializeZonedDateTime(IonReader ionReader) throws IOException {
+        if (ionReader.isNullValue()) {
+            return null;
+        }
+        Timestamp timestamp = ionReader.timestampValue();
+        ZoneOffset zoneOffset = ZoneOffset.ofTotalSeconds(timestamp.getLocalOffset() * 60);
+        BigDecimal decimalSecond = timestamp.getDecimalSecond();
+        int seconds = decimalSecond.intValue();
+        int nanos = decimalSecond.subtract(BigDecimal.valueOf(seconds)).movePointRight(9).intValue();
+        return ZonedDateTime.of(timestamp.getYear(), timestamp.getMonth(), timestamp.getDay(), timestamp.getHour(), timestamp.getMinute(), seconds, nanos, zoneOffset);
     }
 }

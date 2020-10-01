@@ -19,6 +19,7 @@ import com.brandontoner.ion.serde.testtypes.DoubleTestClass;
 import com.brandontoner.ion.serde.testtypes.IntTestClass;
 import com.brandontoner.ion.serde.testtypes.LongTestClass;
 import com.brandontoner.ion.serde.testtypes.StringTestClass;
+import com.brandontoner.ion.serde.testtypes.TemporalTestClass;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -35,7 +36,8 @@ class IonSerializationGeneratorTest {
                                  .withPackage("com.brandontoner.ion.serde")
                                  .withClassName("Serializers")
                                  .addType(IntTestClass.class, LongTestClass.class, BooleanTestClass.class,
-                                          DoubleTestClass.class, BlobTestClass.class, StringTestClass.class)
+                                          DoubleTestClass.class, BlobTestClass.class, StringTestClass.class,
+                                          TemporalTestClass.class)
                                  .withLineSeparator("\n")
                                  .build()
                                  .generate();
@@ -144,6 +146,20 @@ class IonSerializationGeneratorTest {
                 @Override
                 public StringTestClass deserialize(IonReader ionReader) throws IOException {
                     return Serializers.deserializeStringTestClass(ionReader);
+                }
+            }));
+        }
+
+        for (TemporalTestClass permutation : TestInstanceGenerator.<TemporalTestClass>getPermutations(TemporalTestClass.class)) {
+            arguments.add(Arguments.arguments(TemporalTestClass.class, permutation, new Serializer<TemporalTestClass>() {
+                @Override
+                public void serialize(TemporalTestClass o, IonWriter ionWriter) throws IOException {
+                    Serializers.serializeTemporalTestClass(o, ionWriter);
+                }
+            }, new Deserializer<TemporalTestClass>() {
+                @Override
+                public TemporalTestClass deserialize(IonReader ionReader) throws IOException {
+                    return Serializers.deserializeTemporalTestClass(ionReader);
                 }
             }));
         }
