@@ -20,6 +20,7 @@ import java.lang.Long;
 import java.lang.String;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -1089,9 +1090,10 @@ public final class Serializers {
         }
         Timestamp timestamp = ionReader.timestampValue();
         ZoneOffset zoneOffset = ZoneOffset.ofTotalSeconds(timestamp.getLocalOffset() * 60);
-        BigDecimal decimalSecond = timestamp.getDecimalSecond();
-        int seconds = decimalSecond.intValue();
-        int nanos = decimalSecond.subtract(BigDecimal.valueOf(seconds)).movePointRight(9).intValue();
-        return OffsetDateTime.of(timestamp.getYear(), timestamp.getMonth(), timestamp.getDay(), timestamp.getHour(), timestamp.getMinute(), seconds, nanos, zoneOffset);
+        BigDecimal decimalSecond = timestamp.getDecimalMillis().movePointLeft(3);
+        long seconds = decimalSecond.longValue();
+        long nanos = decimalSecond.subtract(BigDecimal.valueOf(seconds)).movePointRight(9).longValue();
+        Instant instant = Instant.ofEpochSecond(seconds, nanos);
+        return OffsetDateTime.ofInstant(instant, zoneOffset);
     }
 }

@@ -2,6 +2,7 @@ package com.brandontoner.ion.serde;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Collection;
@@ -68,16 +69,22 @@ final class OffsetDateTimeGenerator extends NullableGenerator {
                      .append(newline());
         stringBuilder.append(indent(2))
                      .append(getTypeName(BigDecimal.class))
-                     .append(" decimalSecond = timestamp.getDecimalSecond();")
+                     .append(" decimalSecond = timestamp.getDecimalMillis().movePointLeft(3);")
                      .append(newline());
-        stringBuilder.append(indent(2)).append("int seconds = decimalSecond.intValue();").append(newline());
+        stringBuilder.append(indent(2)).append("long seconds = decimalSecond.longValue();").append(newline());
         stringBuilder.append(indent(2))
-                     .append("int nanos = decimalSecond.subtract(BigDecimal.valueOf(seconds)).movePointRight(9).intValue();")
+                     .append("long nanos = decimalSecond.subtract(BigDecimal.valueOf(seconds)).movePointRight(9).longValue();")
+                     .append(newline());
+        stringBuilder.append(indent(2))
+                     .append(getTypeName(Instant.class))
+                     .append(" instant = ")
+                     .append(getTypeName(Instant.class))
+                     .append(".ofEpochSecond(seconds, nanos);")
                      .append(newline());
         stringBuilder.append(indent(2))
                      .append("return ")
                      .append(getTypeName(OffsetDateTime.class))
-                     .append(".of(timestamp.getYear(), timestamp.getMonth(), timestamp.getDay(), timestamp.getHour(), timestamp.getMinute(), seconds, nanos, zoneOffset);")
+                     .append(".ofInstant(instant, zoneOffset);")
                      .append(newline());
         return stringBuilder;
     }

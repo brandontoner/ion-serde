@@ -66,6 +66,7 @@ public class TestInstanceGenerator {
                     output.add((T) "test");
                 } else if (OffsetDateTime.class.equals(type)) {
                     output.add((T) OffsetDateTime.now());
+                    output.add((T) OffsetDateTime.now().plusYears(1000));
                 } else if (BigDecimal.class.equals(type)) {
                     for (Object permutation : getPermutations(double.class)) {
                         double d = (double) permutation;
