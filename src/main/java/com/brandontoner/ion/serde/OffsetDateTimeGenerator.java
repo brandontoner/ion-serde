@@ -2,6 +2,7 @@ package com.brandontoner.ion.serde;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Collection;
@@ -11,22 +12,21 @@ import com.amazon.ion.IonType;
 import com.amazon.ion.Timestamp;
 
 /**
- * Serializer for ZonedDateTime.
+ * Serializer for OffsetDateTime.
  */
-final class ZonedDateTimeGenerator extends NullableGenerator {
+final class OffsetDateTimeGenerator extends NullableGenerator {
 
     /**
      * Constructor.
      *
-     * @param <T>                 type
      * @param generatorFactory    generator factory
      * @param serializationConfig serialization config
      * @param generationContext   generation context
      */
-    ZonedDateTimeGenerator(final GeneratorFactory generatorFactory,
-                           final SerializationConfig serializationConfig,
-                           final GenerationContext generationContext) {
-        super(generatorFactory, serializationConfig, generationContext, ZonedDateTime.class, IonType.TIMESTAMP);
+    OffsetDateTimeGenerator(final GeneratorFactory generatorFactory,
+                            final SerializationConfig serializationConfig,
+                            final GenerationContext generationContext) {
+        super(generatorFactory, serializationConfig, generationContext, OffsetDateTime.class, IonType.TIMESTAMP);
     }
 
     @Override
@@ -77,7 +77,7 @@ final class ZonedDateTimeGenerator extends NullableGenerator {
                      .append(newline());
         stringBuilder.append(indent(2))
                      .append("return ")
-                     .append(getTypeName(ZonedDateTime.class))
+                     .append(getTypeName(OffsetDateTime.class))
                      .append(".of(timestamp.getYear(), timestamp.getMonth(), timestamp.getDay(), timestamp.getHour(), timestamp.getMinute(), seconds, nanos, zoneOffset);")
                      .append(newline());
         return stringBuilder;

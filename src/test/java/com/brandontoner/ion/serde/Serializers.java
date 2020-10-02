@@ -19,8 +19,8 @@ import java.lang.Integer;
 import java.lang.Long;
 import java.lang.String;
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -374,8 +374,8 @@ public final class Serializers {
             return;
         }
         ionWriter.stepIn(IonType.STRUCT);
-        ionWriter.setFieldName("aZonedDateTime");
-        serializeZonedDateTime(v.getaZonedDateTime(), ionWriter);
+        ionWriter.setFieldName("aOffsetDateTime");
+        serializeOffsetDateTime(v.getaZonedDateTime(), ionWriter);
         ionWriter.stepOut();
     }
 
@@ -384,18 +384,18 @@ public final class Serializers {
             return null;
         }
         ionReader.stepIn();
-        ZonedDateTime aZonedDateTime = null;
-        boolean hasAZonedDateTime = false;
+        OffsetDateTime aOffsetDateTime = null;
+        boolean hasAOffsetDateTime = false;
         while (ionReader.next() != null) {
             switch (ionReader.getFieldName()) {
-                case "aZonedDateTime":
-                    aZonedDateTime = deserializeZonedDateTime(ionReader);
-                    hasAZonedDateTime = true;
+                case "aOffsetDateTime":
+                    aOffsetDateTime = deserializeOffsetDateTime(ionReader);
+                    hasAOffsetDateTime = true;
                     break;
             }
         }
         ionReader.stepOut();
-        return new TemporalTestClass(aZonedDateTime);
+        return new TemporalTestClass(aOffsetDateTime);
     }
 
     public static void serializeBoxedInt(Integer v, IonWriter ionWriter) throws IOException {
@@ -1033,7 +1033,7 @@ public final class Serializers {
         }
     }
 
-    public static void serializeZonedDateTime(ZonedDateTime v, IonWriter ionWriter) throws IOException {
+    public static void serializeOffsetDateTime(OffsetDateTime v, IonWriter ionWriter) throws IOException {
         if (v == null) {
             ionWriter.writeNull(IonType.TIMESTAMP);
             return;
@@ -1041,7 +1041,7 @@ public final class Serializers {
         ionWriter.writeTimestamp(Timestamp.forEpochSecond(v.toEpochSecond(), v.getNano(), v.getOffset().getTotalSeconds() / 60));
     }
 
-    public static ZonedDateTime deserializeZonedDateTime(IonReader ionReader) throws IOException {
+    public static OffsetDateTime deserializeOffsetDateTime(IonReader ionReader) throws IOException {
         if (ionReader.isNullValue()) {
             return null;
         }
@@ -1050,6 +1050,6 @@ public final class Serializers {
         BigDecimal decimalSecond = timestamp.getDecimalSecond();
         int seconds = decimalSecond.intValue();
         int nanos = decimalSecond.subtract(BigDecimal.valueOf(seconds)).movePointRight(9).intValue();
-        return ZonedDateTime.of(timestamp.getYear(), timestamp.getMonth(), timestamp.getDay(), timestamp.getHour(), timestamp.getMinute(), seconds, nanos, zoneOffset);
+        return OffsetDateTime.of(timestamp.getYear(), timestamp.getMonth(), timestamp.getDay(), timestamp.getHour(), timestamp.getMinute(), seconds, nanos, zoneOffset);
     }
 }

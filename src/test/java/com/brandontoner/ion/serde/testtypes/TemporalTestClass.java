@@ -1,16 +1,18 @@
 package com.brandontoner.ion.serde.testtypes;
 
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 public class TemporalTestClass {
-    private final ZonedDateTime aZonedDateTime;
+    private final OffsetDateTime aOffsetDateTime;
 
-    public TemporalTestClass(final ZonedDateTime aZonedDateTime) {
-        this.aZonedDateTime = aZonedDateTime;
+    public TemporalTestClass(final OffsetDateTime aOffsetDateTime) {
+        this.aOffsetDateTime = aOffsetDateTime;
     }
 
-    public ZonedDateTime getaZonedDateTime() {
-        return aZonedDateTime;
+    public OffsetDateTime getaZonedDateTime() {
+        return aOffsetDateTime;
     }
 
     @Override
@@ -21,20 +23,17 @@ public class TemporalTestClass {
         if (!(o instanceof TemporalTestClass)) {
             return false;
         }
-
         TemporalTestClass that = (TemporalTestClass) o;
-
-        // using isEqual instead of equals because we drop the time zone name
-        return aZonedDateTime != null ? aZonedDateTime.isEqual(that.aZonedDateTime) : that.aZonedDateTime == null;
+        return Objects.equals(aOffsetDateTime, that.aOffsetDateTime);
     }
 
     @Override
     public int hashCode() {
-        return aZonedDateTime != null ? aZonedDateTime.hashCode() : 0;
+        return Objects.hash(aOffsetDateTime);
     }
 
     @Override
     public String toString() {
-        return "TemporalTestClass{" + "aZonedDateTime=" + aZonedDateTime + '}';
+        return "TemporalTestClass{" + "aOffsetDateTime=" + aOffsetDateTime + '}';
     }
 }

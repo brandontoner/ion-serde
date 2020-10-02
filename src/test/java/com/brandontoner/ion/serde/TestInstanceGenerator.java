@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -62,8 +63,8 @@ public class TestInstanceGenerator {
                     output.addAll((Collection<T>) List.of(Math.PI, Double.NaN));
                 } else if (String.class.equals(type)){
                     output.add((T) "test");
-                } else if (ZonedDateTime.class.equals(type)) {
-                     output.add((T) ZonedDateTime.now());
+                } else if (OffsetDateTime.class.equals(type)) {
+                     output.add((T) OffsetDateTime.now());
                 } else {
                     Class<?> unboxed = TypeUtils.getUnboxedType(clazz);
                     if (unboxed != null) {

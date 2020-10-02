@@ -2,6 +2,7 @@ package com.brandontoner.ion.serde;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -88,8 +89,8 @@ public final class GeneratorFactory {
                                                        Double.class,
                                                        IonType.DECIMAL);
                 }
-                if (ZonedDateTime.class.equals(clazz)) {
-                    return new ZonedDateTimeGenerator(this, serializationConfig, generationContext);
+                if (OffsetDateTime.class.equals(clazz)) {
+                    return new OffsetDateTimeGenerator(this, serializationConfig, generationContext);
                 }
                 return PojoGenerator.create(this, serializationConfig, generationContext, clazz);
             } else if (type instanceof ParameterizedType) {
