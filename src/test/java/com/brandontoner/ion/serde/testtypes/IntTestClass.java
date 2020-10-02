@@ -1,5 +1,6 @@
 package com.brandontoner.ion.serde.testtypes;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -12,18 +13,22 @@ public class IntTestClass {
     private final List<Integer> anIntegerList;
     private final Integer[] anIntegerArray;
     private final int[] anIntArray;
+    private final BigInteger aBigInteger;
 
     public IntTestClass(final int anInt,
                         final Integer anInteger,
                         final Map<Integer, Integer> anIntegerIntegerMap,
                         final List<Integer> anIntegerList,
-                        final Integer[] anIntegerArray, final int[] anIntArray) {
+                        final Integer[] anIntegerArray,
+                        final int[] anIntArray,
+                        final BigInteger aBigInteger) {
         this.anInt = anInt;
         this.anInteger = anInteger;
         this.anIntegerIntegerMap = anIntegerIntegerMap;
         this.anIntegerList = anIntegerList;
         this.anIntegerArray = anIntegerArray;
         this.anIntArray = anIntArray;
+        this.aBigInteger = aBigInteger;
     }
 
     public int getAnInt() {
@@ -50,6 +55,10 @@ public class IntTestClass {
         return anIntArray;
     }
 
+    public BigInteger getABigInteger() {
+        return aBigInteger;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -65,12 +74,13 @@ public class IntTestClass {
                                  that.anIntegerIntegerMap)
                && Objects.equals(anIntegerList, that.anIntegerList)
                && Arrays.equals(anIntegerArray, that.anIntegerArray)
-               && Arrays.equals(anIntArray, that.anIntArray);
+               && Arrays.equals(anIntArray, that.anIntArray)
+               && Objects.equals(aBigInteger, that.aBigInteger);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(anInt, anInteger, anIntegerIntegerMap, anIntegerList);
+        int result = Objects.hash(anInt, anInteger, anIntegerIntegerMap, anIntegerList, aBigInteger);
         result = 31 * result + Arrays.hashCode(anIntegerArray);
         result = 31 * result + Arrays.hashCode(anIntArray);
         return result;
@@ -91,6 +101,8 @@ public class IntTestClass {
                + Arrays.toString(anIntegerArray)
                + ", anIntArray="
                + Arrays.toString(anIntArray)
+               + ", aBigInteger="
+               + aBigInteger
                + '}';
     }
 }

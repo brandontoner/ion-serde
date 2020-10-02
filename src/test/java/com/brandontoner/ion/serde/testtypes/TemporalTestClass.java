@@ -1,7 +1,6 @@
 package com.brandontoner.ion.serde.testtypes;
 
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 import java.util.Objects;
 
 public class TemporalTestClass {

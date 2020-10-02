@@ -70,7 +70,7 @@ class IonSerializationGeneratorTest {
             arguments.add(Arguments.arguments(IntTestClass.class, permutation, new Serializer<IntTestClass>() {
                 @Override
                 public void serialize(IntTestClass o, IonWriter ionWriter) throws IOException {
-                   Serializers.serializeIntTestClass(o, ionWriter);
+                    Serializers.serializeIntTestClass(o, ionWriter);
                 }
             }, new Deserializer<IntTestClass>() {
                 @Override

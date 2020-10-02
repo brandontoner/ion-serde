@@ -1,5 +1,6 @@
 package com.brandontoner.ion.serde.testtypes;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -12,19 +13,22 @@ public class DoubleTestClass {
     private final List<Double> aDoubleList;
     private final Double[] aBoxedDoubleArray;
     private final double[] aDoubleArray;
+    private final BigDecimal aBigDecimal;
 
     public DoubleTestClass(final double aDouble,
                            final Double aBoxedDouble,
                            final Map<Double, Double> aDoubleDoubleMap,
                            final List<Double> aDoubleList,
                            final Double[] aBoxedDoubleArray,
-                           final double[] aDoubleArray) {
+                           final double[] aDoubleArray,
+                           final BigDecimal aBigDecimal) {
         this.aDouble = aDouble;
         this.aBoxedDouble = aBoxedDouble;
         this.aDoubleDoubleMap = aDoubleDoubleMap;
         this.aDoubleList = aDoubleList;
         this.aBoxedDoubleArray = aBoxedDoubleArray;
         this.aDoubleArray = aDoubleArray;
+        this.aBigDecimal = aBigDecimal;
     }
 
     public double getADouble() {
@@ -51,6 +55,10 @@ public class DoubleTestClass {
         return aDoubleArray;
     }
 
+    public BigDecimal getABigDecimal() {
+        return aBigDecimal;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -65,12 +73,13 @@ public class DoubleTestClass {
                && Objects.equals(aDoubleDoubleMap, that.aDoubleDoubleMap)
                && Objects.equals(aDoubleList, that.aDoubleList)
                && Arrays.equals(aBoxedDoubleArray, that.aBoxedDoubleArray)
-               && Arrays.equals(aDoubleArray, that.aDoubleArray);
+               && Arrays.equals(aDoubleArray, that.aDoubleArray)
+               && Objects.equals(aBigDecimal, that.aBigDecimal);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(aDouble, aBoxedDouble, aDoubleDoubleMap, aDoubleList);
+        int result = Objects.hash(aDouble, aBoxedDouble, aDoubleDoubleMap, aDoubleList, aBigDecimal);
         result = 31 * result + Arrays.hashCode(aBoxedDoubleArray);
         result = 31 * result + Arrays.hashCode(aDoubleArray);
         return result;
@@ -91,6 +100,8 @@ public class DoubleTestClass {
                + Arrays.toString(aBoxedDoubleArray)
                + ", aDoubleArray="
                + Arrays.toString(aDoubleArray)
+               + ", aBigDecimal="
+               + aBigDecimal
                + '}';
     }
 }

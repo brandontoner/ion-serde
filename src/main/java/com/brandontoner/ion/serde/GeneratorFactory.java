@@ -2,6 +2,8 @@ package com.brandontoner.ion.serde;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -87,6 +89,12 @@ public final class GeneratorFactory {
                                                        double.class,
                                                        Double.class,
                                                        IonType.DECIMAL);
+                }
+                if (BigDecimal.class.equals(clazz)) {
+                    return new BigDecimalGenerator(this, serializationConfig, generationContext);
+                }
+                if (BigInteger.class.equals(clazz)) {
+                    return new BigIntegerGenerator(this, serializationConfig, generationContext);
                 }
                 if (OffsetDateTime.class.equals(clazz)) {
                     return new OffsetDateTimeGenerator(this, serializationConfig, generationContext);

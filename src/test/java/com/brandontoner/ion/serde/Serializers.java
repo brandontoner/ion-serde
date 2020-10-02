@@ -19,6 +19,7 @@ import java.lang.Integer;
 import java.lang.Long;
 import java.lang.String;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -46,6 +47,8 @@ public final class Serializers {
         serializeBoxedIntArray(v.getAnIntegerArray(), ionWriter);
         ionWriter.setFieldName("anIntArray");
         serializeIntArray(v.getAnIntArray(), ionWriter);
+        ionWriter.setFieldName("aBigInteger");
+        serializeBigInteger(v.getABigInteger(), ionWriter);
         ionWriter.stepOut();
     }
 
@@ -66,6 +69,8 @@ public final class Serializers {
         boolean hasAnIntegerArray = false;
         int[] anIntArray = null;
         boolean hasAnIntArray = false;
+        BigInteger aBigInteger = null;
+        boolean hasABigInteger = false;
         while (ionReader.next() != null) {
             switch (ionReader.getFieldName()) {
                 case "anInt":
@@ -92,10 +97,14 @@ public final class Serializers {
                     anIntArray = deserializeIntArray(ionReader);
                     hasAnIntArray = true;
                     break;
+                case "aBigInteger":
+                    aBigInteger = deserializeBigInteger(ionReader);
+                    hasABigInteger = true;
+                    break;
             }
         }
         ionReader.stepOut();
-        return new IntTestClass(anInt, anInteger, anIntegerIntegerMap, anIntegerList, anIntegerArray, anIntArray);
+        return new IntTestClass(anInt, anInteger, anIntegerIntegerMap, anIntegerList, anIntegerArray, anIntArray, aBigInteger);
     }
 
     public static void serializeLongTestClass(LongTestClass v, IonWriter ionWriter) throws IOException {
@@ -256,6 +265,8 @@ public final class Serializers {
         serializeBoxedDoubleArray(v.getABoxedDoubleArray(), ionWriter);
         ionWriter.setFieldName("aDoubleArray");
         serializeDoubleArray(v.getADoubleArray(), ionWriter);
+        ionWriter.setFieldName("aBigDecimal");
+        serializeBigDecimal(v.getABigDecimal(), ionWriter);
         ionWriter.stepOut();
     }
 
@@ -276,6 +287,8 @@ public final class Serializers {
         boolean hasABoxedDoubleArray = false;
         double[] aDoubleArray = null;
         boolean hasADoubleArray = false;
+        BigDecimal aBigDecimal = null;
+        boolean hasABigDecimal = false;
         while (ionReader.next() != null) {
             switch (ionReader.getFieldName()) {
                 case "aDouble":
@@ -302,10 +315,14 @@ public final class Serializers {
                     aDoubleArray = deserializeDoubleArray(ionReader);
                     hasADoubleArray = true;
                     break;
+                case "aBigDecimal":
+                    aBigDecimal = deserializeBigDecimal(ionReader);
+                    hasABigDecimal = true;
+                    break;
             }
         }
         ionReader.stepOut();
-        return new DoubleTestClass(aDouble, aBoxedDouble, aDoubleDoubleMap, aDoubleList, aBoxedDoubleArray, aDoubleArray);
+        return new DoubleTestClass(aDouble, aBoxedDouble, aDoubleDoubleMap, aDoubleList, aBoxedDoubleArray, aDoubleArray, aBigDecimal);
     }
 
     public static void serializeBlobTestClass(BlobTestClass v, IonWriter ionWriter) throws IOException {
@@ -546,6 +563,21 @@ public final class Serializers {
         output = Arrays.copyOfRange(output, 0, count);
         ionReader.stepOut();
         return output;
+    }
+
+    public static void serializeBigInteger(BigInteger v, IonWriter ionWriter) throws IOException {
+        if (v == null) {
+            ionWriter.writeNull(IonType.INT);
+            return;
+        }
+        ionWriter.writeInt(v);
+    }
+
+    public static BigInteger deserializeBigInteger(IonReader ionReader) throws IOException {
+        if (ionReader.isNullValue()) {
+            return null;
+        }
+        return ionReader.bigIntegerValue();
     }
 
     public static void serializeBoxedLong(Long v, IonWriter ionWriter) throws IOException {
@@ -996,6 +1028,21 @@ public final class Serializers {
         output = Arrays.copyOfRange(output, 0, count);
         ionReader.stepOut();
         return output;
+    }
+
+    public static void serializeBigDecimal(BigDecimal v, IonWriter ionWriter) throws IOException {
+        if (v == null) {
+            ionWriter.writeNull(IonType.DECIMAL);
+            return;
+        }
+        ionWriter.writeDecimal(v);
+    }
+
+    public static BigDecimal deserializeBigDecimal(IonReader ionReader) throws IOException {
+        if (ionReader.isNullValue()) {
+            return null;
+        }
+        return ionReader.bigDecimalValue();
     }
 
     public static void serializeByteArray(byte[] v, IonWriter ionWriter) throws IOException {

@@ -4,8 +4,9 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -61,10 +62,21 @@ public class TestInstanceGenerator {
                     output.addAll((Collection<T>) List.of(true, false));
                 } else if (double.class.equals(type)) {
                     output.addAll((Collection<T>) List.of(Math.PI, Double.NaN));
-                } else if (String.class.equals(type)){
+                } else if (String.class.equals(type)) {
                     output.add((T) "test");
                 } else if (OffsetDateTime.class.equals(type)) {
-                     output.add((T) OffsetDateTime.now());
+                    output.add((T) OffsetDateTime.now());
+                } else if (BigDecimal.class.equals(type)) {
+                    for (Object permutation : getPermutations(double.class)) {
+                        double d = (double) permutation;
+                        if (Double.isFinite(d)) {
+                            output.add((T) new BigDecimal(d));
+                        }
+                    }
+                } else if (BigInteger.class.equals(type)) {
+                    for (Object permutation : getPermutations(long.class)) {
+                        output.add((T) BigInteger.valueOf((long) permutation));
+                    }
                 } else {
                     Class<?> unboxed = TypeUtils.getUnboxedType(clazz);
                     if (unboxed != null) {
