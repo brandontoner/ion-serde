@@ -401,17 +401,16 @@ public final class Serializers {
     public static void serializeBoxedInt(Integer v, IonWriter ionWriter) throws IOException {
         if (v == null) {
             ionWriter.writeNull(IonType.INT);
-        } else {
-            ionWriter.writeInt(v);
+            return;
         }
+        ionWriter.writeInt(v);
     }
 
     public static Integer deserializeBoxedInt(IonReader ionReader) throws IOException {
         if (ionReader.isNullValue()) {
             return null;
-        } else {
-            return ionReader.intValue();
         }
+        return ionReader.intValue();
     }
 
     public static void serializeIntegerIntegerMap(Map<Integer, Integer> v, IonWriter ionWriter) throws IOException {
@@ -552,17 +551,16 @@ public final class Serializers {
     public static void serializeBoxedLong(Long v, IonWriter ionWriter) throws IOException {
         if (v == null) {
             ionWriter.writeNull(IonType.INT);
-        } else {
-            ionWriter.writeInt(v);
+            return;
         }
+        ionWriter.writeInt(v);
     }
 
     public static Long deserializeBoxedLong(IonReader ionReader) throws IOException {
         if (ionReader.isNullValue()) {
             return null;
-        } else {
-            return ionReader.longValue();
         }
+        return ionReader.longValue();
     }
 
     public static void serializeLongLongMap(Map<Long, Long> v, IonWriter ionWriter) throws IOException {
@@ -703,17 +701,16 @@ public final class Serializers {
     public static void serializeBoxedBoolean(Boolean v, IonWriter ionWriter) throws IOException {
         if (v == null) {
             ionWriter.writeNull(IonType.BOOL);
-        } else {
-            ionWriter.writeBool(v);
+            return;
         }
+        ionWriter.writeBool(v);
     }
 
     public static Boolean deserializeBoxedBoolean(IonReader ionReader) throws IOException {
         if (ionReader.isNullValue()) {
             return null;
-        } else {
-            return ionReader.booleanValue();
         }
+        return ionReader.booleanValue();
     }
 
     public static void serializeBooleanBooleanMap(Map<Boolean, Boolean> v, IonWriter ionWriter) throws IOException {
@@ -854,17 +851,16 @@ public final class Serializers {
     public static void serializeBoxedDouble(Double v, IonWriter ionWriter) throws IOException {
         if (v == null) {
             ionWriter.writeNull(IonType.DECIMAL);
-        } else {
-            ionWriter.writeFloat(v);
+            return;
         }
+        ionWriter.writeFloat(v);
     }
 
     public static Double deserializeBoxedDouble(IonReader ionReader) throws IOException {
         if (ionReader.isNullValue()) {
             return null;
-        } else {
-            return ionReader.doubleValue();
         }
+        return ionReader.doubleValue();
     }
 
     public static void serializeDoubleDoubleMap(Map<Double, Double> v, IonWriter ionWriter) throws IOException {
@@ -1020,17 +1016,16 @@ public final class Serializers {
     public static void serializeCharSequence(CharSequence v, IonWriter ionWriter) throws IOException {
         if (v == null) {
             ionWriter.writeNull(IonType.STRING);
-        } else {
-            ionWriter.writeString(v.toString());
+            return;
         }
+        ionWriter.writeString(v.toString());
     }
 
     public static String deserializeCharSequence(IonReader ionReader) throws IOException {
         if (ionReader.isNullValue()) {
             return null;
-        } else {
-            return ionReader.stringValue();
         }
+        return ionReader.stringValue();
     }
 
     public static void serializeOffsetDateTime(OffsetDateTime v, IonWriter ionWriter) throws IOException {

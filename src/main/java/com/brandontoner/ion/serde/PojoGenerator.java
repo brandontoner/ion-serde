@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import com.amazon.ion.IonType;
 
-final class PojoGenerator extends MethodGenerator {
+final class PojoGenerator extends NullableGenerator {
     private final Type serializationType;
     private final Type deserializationType;
     private final List<Param> params;
@@ -20,7 +20,12 @@ final class PojoGenerator extends MethodGenerator {
                           final SerializationConfig serializationConfig,
                           final GenerationContext generationContext,
                           final GeneratorFactory generatorFactory) {
-        super(generatorFactory, serializationConfig, generationContext, serializationType, deserializationType);
+        super(generatorFactory,
+              serializationConfig,
+              generationContext,
+              serializationType,
+              deserializationType,
+              IonType.STRUCT);
         // TODO make sure the types make sense
         // * deserializationType must be a subclass / implement serialization type
         // * deserializationType must have a constructor with the provided parameters
@@ -58,18 +63,8 @@ final class PojoGenerator extends MethodGenerator {
     }
 
     @Override
-    public CharSequence generateSerializerBody(final String valueName, final String ionWriterName) {
+    public CharSequence generateNonNullSerializerBody(final String valueName, final String ionWriterName) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(indent(2)).append("if (").append(valueName).append(" == null) {").append(newline());
-        stringBuilder.append(indent(3))
-                     .append(ionWriterName)
-                     .append(".writeNull(")
-                     .append(getTypeName(IonType.class))
-                     .append(".STRUCT);")
-                     .append(newline());
-        stringBuilder.append(indent(3)).append("return;").append(newline());
-        stringBuilder.append(indent(2)).append('}').append(newline());
-
         stringBuilder.append(indent(2))
                      .append(ionWriterName)
                      .append(".stepIn(")
@@ -99,16 +94,8 @@ final class PojoGenerator extends MethodGenerator {
     }
 
     @Override
-    public CharSequence generateDeserializerBody(final String ionReaderName) {
+    public CharSequence generateNonNullDeserializerBody(final String ionReaderName) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(indent(2))
-                     .append("if (")
-                     .append(ionReaderName)
-                     .append(".isNullValue()) {")
-                     .append(newline());
-        stringBuilder.append(indent(3)).append("return null;").append(newline());
-        stringBuilder.append(indent(2)).append('}').append(newline());
-
         stringBuilder.append(indent(2)).append(ionReaderName).append(".stepIn();").append(newline());
 
         for (final Param param : params) {

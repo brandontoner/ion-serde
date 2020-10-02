@@ -9,7 +9,7 @@ import com.amazon.ion.IonType;
 /**
  * Generates serializers for CharSequences.
  */
-final class CharSequenceGenerator extends MethodGenerator {
+final class CharSequenceGenerator extends NullableGenerator {
     /**
      * Constructor.
      *
@@ -20,7 +20,12 @@ final class CharSequenceGenerator extends MethodGenerator {
     CharSequenceGenerator(final GeneratorFactory generatorFactory,
                           final SerializationConfig serializationConfig,
                           final GenerationContext generationContext) {
-        super(generatorFactory, serializationConfig, generationContext, CharSequence.class, String.class);
+        super(generatorFactory,
+              serializationConfig,
+              generationContext,
+              CharSequence.class,
+              String.class,
+              IonType.STRING);
     }
 
     @Override
@@ -29,43 +34,19 @@ final class CharSequenceGenerator extends MethodGenerator {
     }
 
     @Override
-    protected CharSequence generateSerializerBody(final String valueName, final String ionWriterName) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(indent(2)).append("if (").append(valueName).append(" == null) {").append(newline());
-        stringBuilder.append(indent(3))
-                     .append(ionWriterName)
-                     .append(".writeNull(")
-                     .append(getTypeName(IonType.class))
-                     .append(".STRING")
-                     .append(");")
-                     .append(newline());
-        stringBuilder.append(indent(2)).append("} else {").append(newline());
-        stringBuilder.append(indent(3))
-                     .append(ionWriterName)
-                     .append(".writeString(")
-                     .append(valueName)
-                     .append(".toString());")
-                     .append(newline());
-        stringBuilder.append(indent(2)).append('}').append(newline());
-        return stringBuilder;
+    protected CharSequence generateNonNullSerializerBody(final String valueName, final String ionWriterName) {
+        return new StringBuilder(indent(2)).append(ionWriterName)
+                                           .append(".writeString(")
+                                           .append(valueName)
+                                           .append(".toString());")
+                                           .append(newline());
     }
 
     @Override
-    protected CharSequence generateDeserializerBody(final String ionReaderName) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(indent(2))
-                     .append("if (")
-                     .append(ionReaderName)
-                     .append(".isNullValue()) {")
-                     .append(newline());
-        stringBuilder.append(indent(3)).append("return null;").append(newline());
-        stringBuilder.append(indent(2)).append("} else {").append(newline());
-        stringBuilder.append(indent(3))
-                     .append("return ")
-                     .append(ionReaderName)
-                     .append(".stringValue();")
-                     .append(newline());
-        stringBuilder.append(indent(2)).append('}').append(newline());
-        return stringBuilder;
+    protected CharSequence generateNonNullDeserializerBody(final String ionReaderName) {
+        return new StringBuilder(indent(2)).append("return ")
+                                           .append(ionReaderName)
+                                           .append(".stringValue();")
+                                           .append(newline());
     }
 }

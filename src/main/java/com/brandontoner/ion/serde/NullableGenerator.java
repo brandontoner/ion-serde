@@ -19,6 +19,16 @@ public abstract class NullableGenerator extends MethodGenerator {
         mIonType = ionType;
     }
 
+    protected NullableGenerator(final GeneratorFactory generatorFactory,
+                                final SerializationConfig serializationConfig,
+                                final GenerationContext generationContext,
+                                final Type inputType,
+                                final Type outputType,
+                                final IonType ionType) {
+        super(generatorFactory, serializationConfig, generationContext, inputType, outputType);
+        mIonType = ionType;
+    }
+
     @Override
     public final CharSequence generateSerializerBody(final String valueName, final String ionWriterName) {
         StringBuilder stringBuilder = new StringBuilder();

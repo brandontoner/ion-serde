@@ -9,10 +9,8 @@ import com.amazon.ion.IonType;
 /**
  * Serializer for boxed primitives.
  */
-final class BoxedPrimitiveGenerator extends MethodGenerator {
-    private final Class<?> mBoxedClass;
+final class BoxedPrimitiveGenerator extends NullableGenerator {
     private final Class<?> mPrimitiveClass;
-    private final IonType mIonType;
 
     /**
      * Constructor.
@@ -23,19 +21,17 @@ final class BoxedPrimitiveGenerator extends MethodGenerator {
      * @param generationContext   generation context
      * @param primitiveClass      primitive class
      * @param boxedClass          boxed class
-     * @param ionType
+     * @param ionType             ion type
      */
     <T> BoxedPrimitiveGenerator(final GeneratorFactory generatorFactory,
                                 final SerializationConfig serializationConfig,
                                 final GenerationContext generationContext,
                                 final Class<T> primitiveClass,
-                                final Class<T> boxedClass,
+                                final Type boxedClass,
                                 final IonType ionType) {
-        super(generatorFactory, serializationConfig, generationContext, boxedClass);
+        super(generatorFactory, serializationConfig, generationContext, boxedClass, ionType);
         // TODO make sure types make sense
         mPrimitiveClass = primitiveClass;
-        mBoxedClass = boxedClass;
-        mIonType = ionType;
     }
 
     @Override
@@ -44,42 +40,19 @@ final class BoxedPrimitiveGenerator extends MethodGenerator {
     }
 
     @Override
-    public CharSequence generateSerializerBody(final String valueName, final String ionWriterName) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(indent(2)).append("if (").append(valueName).append(" == null) {").append(newline());
-        stringBuilder.append(indent(3))
-                     .append(ionWriterName)
-                     .append(".writeNull(")
-                     .append(getTypeName(IonType.class))
-                     .append('.')
-                     .append(mIonType.name())
-                     .append(");")
-                     .append(newline());
-        stringBuilder.append(indent(2)).append("} else {").append(newline());
-        stringBuilder.append(indent(3))
-                     .append(getGeneratorFactory().getGenerator(mPrimitiveClass).callSerializer(valueName, ionWriterName))
-                     .append(';')
-                     .append(newline());
-        stringBuilder.append(indent(2)).append('}').append(newline());
-        return stringBuilder;
+    public CharSequence generateNonNullSerializerBody(final String valueName, final String ionWriterName) {
+        return new StringBuilder(indent(2)).append(getGeneratorFactory().getGenerator(mPrimitiveClass)
+                                                                        .callSerializer(valueName, ionWriterName))
+                                           .append(';')
+                                           .append(newline());
     }
 
     @Override
-    public CharSequence generateDeserializerBody(final String ionReaderName) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(indent(2))
-                     .append("if (")
-                     .append(ionReaderName)
-                     .append(".isNullValue()) {")
-                     .append(newline());
-        stringBuilder.append(indent(3)).append("return null;").append(newline());
-        stringBuilder.append(indent(2)).append("} else {").append(newline());
-        stringBuilder.append(indent(3))
-                     .append("return ")
-                     .append(getGeneratorFactory().getGenerator(mPrimitiveClass).callDeserializer(ionReaderName))
-                     .append(';')
-                     .append(newline());
-        stringBuilder.append(indent(2)).append('}').append(newline());
-        return stringBuilder;
+    public CharSequence generateNonNullDeserializerBody(final String ionReaderName) {
+        return new StringBuilder(indent(2)).append("return ")
+                                           .append(getGeneratorFactory().getGenerator(mPrimitiveClass)
+                                                                        .callDeserializer(ionReaderName))
+                                           .append(';')
+                                           .append(newline());
     }
 }
